@@ -13,7 +13,12 @@ public class InputHandler : MonoBehaviour
 
     public bool GetMoveInput() => GetRightInput() || GetLeftInput();
 
-    public bool GetJumpInput() => Input.GetKeyDown(controls.jumpKey);
+    public bool GetJumpInputDown() => Input.GetKeyDown(controls.jumpKey);
 
     public bool GetJumpInputUp() => Input.GetKeyUp(controls.jumpKey);
+
+
+    public bool GetCrouchKey() => Input.GetKey(controls.crouchKey);
+    public bool GetCrouchKeyDown() => Input.GetKeyDown(controls.crouchKey);
+    public bool GetCrouchKeyUp() => Input.GetKeyUp(controls.crouchKey);
 }

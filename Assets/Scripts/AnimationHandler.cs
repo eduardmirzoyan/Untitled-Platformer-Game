@@ -28,4 +28,9 @@ public class AnimationHandler : MonoBehaviour
         // Re-assign current
         currentAnimation = newAnimation;
     }
+
+    public bool IsFinished()
+    {
+        return animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1f;
+    }
 }
