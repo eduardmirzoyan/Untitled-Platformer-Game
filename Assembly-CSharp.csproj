@@ -56,6 +56,7 @@
      <Compile Include="Assets\Tarodev 2D Controller\_Scripts\ScriptableStats.cs" />
      <Compile Include="Assets\Scripts\Player\AnimationHandler.cs" />
      <Compile Include="Assets\Scripts\Player\InputHandler.cs" />
+     <Compile Include="Assets\Scripts\PlayerData.cs" />
      <Compile Include="Assets\Scripts\CollectibleHandler.cs" />
      <Compile Include="Assets\Scripts\LevelHandler.cs" />
      <Compile Include="Assets\Scripts\ExitDoorHandler.cs" />
