@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -12,8 +13,8 @@ TagManager:
   - Water
   - UI
   - Wall
-  - 
-  - 
+  - Collectibles
+  - Interactables
   - 
   - 
   - Player
@@ -43,6 +44,12 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 681619883
+    locked: 0
+  - name: Exit
+    uniqueID: 597204779
+    locked: 0
+  - name: Collectibles
+    uniqueID: 771317671
     locked: 0
   - name: Player
     uniqueID: 1754964055

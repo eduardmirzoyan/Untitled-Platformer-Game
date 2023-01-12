@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private enum PlayerState { Idle, Run, Rise, Fall, Crouch, Crouchwalk, Wallslide, Walljump, Wallhang, Mantle };
+    private enum PlayerState { Idle, Run, Rise, Fall, Crouch, Crouchwalk, Wallslide, Walljump, Wallhang, Mantle, Exiting, Entering, Dead };
 
     [Header("Components")]
     [SerializeField] private InputHandler inputHandler;
     [SerializeField] private MovementHandler movementHandler;
     [SerializeField] private AnimationHandler animationHandler;
+    [SerializeField] private InteractionHandler interactionHandler;
+    [SerializeField] private DamageHandler damageHandler;
 
     [Header("Data")]
     [SerializeField] private PlayerState playerState;
@@ -20,14 +22,33 @@ public class PlayerController : MonoBehaviour
         inputHandler = GetComponent<InputHandler>();
         movementHandler = GetComponent<MovementHandler>();
         animationHandler = GetComponent<AnimationHandler>();
+        interactionHandler = GetComponent<InteractionHandler>();
+        damageHandler = GetComponent<DamageHandler>();
+    }
 
+    private void Start()
+    {
         // Set starting state
-        playerState = PlayerState.Idle;
+        playerState = PlayerState.Entering;
+        animationHandler.ChangeAnimation("Enter");
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Check for death
+        if (playerState != PlayerState.Dead && damageHandler.IsHurt())
+        {
+            // Stop moving
+            movementHandler.Stop();
+
+            // Change animation
+            animationHandler.ChangeAnimation("Dead");
+
+            // Change states
+            playerState = PlayerState.Dead;
+        }
+
         switch (playerState)
         {
             case PlayerState.Idle:
@@ -41,11 +62,30 @@ public class PlayerController : MonoBehaviour
                 // Handle crouching
                 HandleCrouching();
 
+                // Handle interacting
+                HandleInteracting();
+
+                // Check for interacting
+                if (interactionHandler.GetExit() != Vector3.back)
+                {
+                    // Stop moving
+                    movementHandler.Stop();
+
+                    // Relocate
+                    transform.position = interactionHandler.GetExit();
+
+                    // Change animation
+                    animationHandler.ChangeAnimation("Exit");
+
+                    // Change states
+                    playerState = PlayerState.Exiting;
+                }
+
                 // Check for running
                 if (movementHandler.IsRunning())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Run");
+                    animationHandler.ChangeAnimation("Run");
 
                     // Change states
                     playerState = PlayerState.Run;
@@ -58,7 +98,7 @@ public class PlayerController : MonoBehaviour
                     movementHandler.StartCrouch();
 
                     // Change animation
-                    animationHandler.changeAnimation("Crouch");
+                    animationHandler.ChangeAnimation("Crouch");
 
                     // Change states
                     playerState = PlayerState.Crouch;
@@ -68,7 +108,7 @@ public class PlayerController : MonoBehaviour
                 if (!movementHandler.IsGrounded())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Rise");
+                    animationHandler.ChangeAnimation("Rise");
 
                     // Change states
                     playerState = PlayerState.Rise;
@@ -78,7 +118,7 @@ public class PlayerController : MonoBehaviour
                 if (movementHandler.IsFalling())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Fall");
+                    animationHandler.ChangeAnimation("Fall");
 
                     // Change states
                     playerState = PlayerState.Fall;
@@ -96,11 +136,30 @@ public class PlayerController : MonoBehaviour
                 // Handle crouching
                 HandleCrouching();
 
+                // Handle interacting
+                HandleInteracting();
+
+                // Check for interacting
+                if (interactionHandler.GetExit() != Vector3.back)
+                {
+                    // Stop moving
+                    movementHandler.Stop();
+
+                    // Relocate
+                    transform.position = interactionHandler.GetExit();
+
+                    // Change animation
+                    animationHandler.ChangeAnimation("Exit");
+
+                    // Change states
+                    playerState = PlayerState.Exiting;
+                }
+
                 // Check for idling
                 if (!movementHandler.IsRunning())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Idle");
+                    animationHandler.ChangeAnimation("Idle");
 
                     // Change states
                     playerState = PlayerState.Idle;
@@ -109,11 +168,8 @@ public class PlayerController : MonoBehaviour
                 // Check for crouch walk
                 if (movementHandler.IsCrouching())
                 {
-                    // Enable crouch
-                    // movementHandler.StartCrouch();
-
                     // Change animation
-                    animationHandler.changeAnimation("Crouch Walk");
+                    animationHandler.ChangeAnimation("Crouch Walk");
 
                     // Change states
                     playerState = PlayerState.Crouchwalk;
@@ -122,7 +178,7 @@ public class PlayerController : MonoBehaviour
                 if (!movementHandler.IsGrounded())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Rise");
+                    animationHandler.ChangeAnimation("Rise");
 
                     // Change states
                     playerState = PlayerState.Rise;
@@ -132,7 +188,7 @@ public class PlayerController : MonoBehaviour
                 if (movementHandler.IsFalling())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Fall");
+                    animationHandler.ChangeAnimation("Fall");
 
                     // Change states
                     playerState = PlayerState.Fall;
@@ -151,7 +207,7 @@ public class PlayerController : MonoBehaviour
                 if (movementHandler.IsFalling())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Fall");
+                    animationHandler.ChangeAnimation("Fall");
 
                     // Change states
                     playerState = PlayerState.Fall;
@@ -161,7 +217,7 @@ public class PlayerController : MonoBehaviour
                 if (movementHandler.IsTouchingLedge())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Hang");
+                    animationHandler.ChangeAnimation("Hang");
 
                     // Change states
                     playerState = PlayerState.Wallhang;
@@ -180,7 +236,7 @@ public class PlayerController : MonoBehaviour
                 if (movementHandler.IsGrounded())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Idle");
+                    animationHandler.ChangeAnimation("Idle");
 
                     // Change states
                     playerState = PlayerState.Idle;
@@ -190,7 +246,7 @@ public class PlayerController : MonoBehaviour
                 if (movementHandler.IsRising())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Rise");
+                    animationHandler.ChangeAnimation("Rise");
 
                     // Change states
                     playerState = PlayerState.Rise;
@@ -200,7 +256,7 @@ public class PlayerController : MonoBehaviour
                 if (movementHandler.IsTouchingLedge())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Hang");
+                    animationHandler.ChangeAnimation("Hang");
 
                     // Change states
                     playerState = PlayerState.Wallhang;
@@ -210,7 +266,7 @@ public class PlayerController : MonoBehaviour
                 if (movementHandler.IsWallSliding() && inputHandler.GetMoveInput())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Wallslide");
+                    animationHandler.ChangeAnimation("Wallslide");
 
                     // Change states
                     playerState = PlayerState.Wallslide;
@@ -232,7 +288,7 @@ public class PlayerController : MonoBehaviour
                     movementHandler.EndCrouch();
 
                     // Change animation
-                    animationHandler.changeAnimation("Idle");
+                    animationHandler.ChangeAnimation("Idle");
 
                     // Change states
                     playerState = PlayerState.Idle;
@@ -242,12 +298,12 @@ public class PlayerController : MonoBehaviour
                 if (movementHandler.IsRunning())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Crouch Walk");
+                    animationHandler.ChangeAnimation("Crouch Walk");
 
                     // Change states
                     playerState = PlayerState.Crouchwalk;
                 }
-                
+
                 break;
             case PlayerState.Crouchwalk:
 
@@ -261,7 +317,7 @@ public class PlayerController : MonoBehaviour
                 if (!movementHandler.IsRunning())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Crouch");
+                    animationHandler.ChangeAnimation("Crouch");
 
                     // Change states
                     playerState = PlayerState.Crouch;
@@ -274,7 +330,7 @@ public class PlayerController : MonoBehaviour
                     movementHandler.EndCrouch();
 
                     // Change animation
-                    animationHandler.changeAnimation("Run");
+                    animationHandler.ChangeAnimation("Run");
 
                     // Change states
                     playerState = PlayerState.Run;
@@ -287,7 +343,7 @@ public class PlayerController : MonoBehaviour
                     movementHandler.EndCrouch();
 
                     // Change animation
-                    animationHandler.changeAnimation("Fall");
+                    animationHandler.ChangeAnimation("Fall");
 
                     // Change states
                     playerState = PlayerState.Fall;
@@ -306,7 +362,7 @@ public class PlayerController : MonoBehaviour
                 if (movementHandler.IsRising())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Rise");
+                    animationHandler.ChangeAnimation("Rise");
 
                     // Change states
                     playerState = PlayerState.Rise;
@@ -316,17 +372,17 @@ public class PlayerController : MonoBehaviour
                 if (!inputHandler.GetMoveInput())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Fall");
+                    animationHandler.ChangeAnimation("Fall");
 
                     // Change states
                     playerState = PlayerState.Fall;
                 }
-                
+
                 // Check for idle
                 if (movementHandler.IsGrounded())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Idle");
+                    animationHandler.ChangeAnimation("Idle");
 
                     // Change states
                     playerState = PlayerState.Idle;
@@ -349,25 +405,23 @@ public class PlayerController : MonoBehaviour
                 if (movementHandler.IsRising())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Rise");
+                    animationHandler.ChangeAnimation("Rise");
 
                     // Change states
                     playerState = PlayerState.Rise;
                 }
 
-                if (movementHandler.CanMantle())
+                if (movementHandler.IsMantle())
                 {
                     // Change animation
-                    animationHandler.changeAnimation("Mantle");
+                    animationHandler.ChangeAnimation("Mantle");
 
                     // Change states
                     playerState = PlayerState.Mantle;
                 }
 
-                // TODO
                 break;
             case PlayerState.Mantle:
-                // TODO
 
                 if (animationHandler.IsFinished())
                 {
@@ -375,11 +429,34 @@ public class PlayerController : MonoBehaviour
                     movementHandler.PerformMantle();
 
                     // Change animation
-                    animationHandler.changeAnimation("Idle");
+                    animationHandler.ChangeAnimation("Idle");
 
                     // Change states
                     playerState = PlayerState.Idle;
                 }
+
+                break;
+            case PlayerState.Exiting:
+
+                // Do nothing
+
+                break;
+            case PlayerState.Entering:
+
+                // When animation is over...
+                if (animationHandler.IsFinished())
+                {
+                    // Change animation
+                    animationHandler.ChangeAnimation("Idle");
+
+                    // Change states
+                    playerState = PlayerState.Idle;
+                }
+
+                break;
+            case PlayerState.Dead:
+                
+                // Do nothing...
 
                 break;
             default:
@@ -400,9 +477,14 @@ public class PlayerController : MonoBehaviour
         if (inputHandler.GetJumpInputDown()) movementHandler.Jump();
     }
 
-    public void HandleCrouching()
+    private void HandleCrouching()
     {
         if (inputHandler.GetCrouchKey()) movementHandler.StartCrouch();
         else movementHandler.EndCrouch();
+    }
+
+    private void HandleInteracting()
+    {
+        if (inputHandler.GetInteractKeyDown()) interactionHandler.InteractWithSurroundings();
     }
 }

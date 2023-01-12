@@ -44,7 +44,7 @@
      <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\LadderTop.cs" />
      <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\RadialPlatform.cs" />
      <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\Explosion.cs" />
-     <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
      <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\PlatformBase.cs" />
      <Compile Include="Assets\Tarodev 2D Controller\_Scripts\PlayerAnimator.cs" />
      <Compile Include="Assets\Tarodev 2D Controller\_Scripts\PlayerController.cs" />
@@ -52,10 +52,17 @@
      <Compile Include="Assets\Tarodev 2D Controller\_Scripts\PlayerInput.cs" />
      <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\TaroTile.cs" />
      <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\LapTrigger.cs" />
-     <Compile Include="Assets\Scripts\MovementHandler.cs" />
+     <Compile Include="Assets\Scripts\Player\MovementHandler.cs" />
      <Compile Include="Assets\Tarodev 2D Controller\_Scripts\ScriptableStats.cs" />
-     <Compile Include="Assets\Scripts\AnimationHandler.cs" />
-     <Compile Include="Assets\Scripts\InputHandler.cs" />
+     <Compile Include="Assets\Scripts\Player\AnimationHandler.cs" />
+     <Compile Include="Assets\Scripts\Player\InputHandler.cs" />
+     <Compile Include="Assets\Scripts\CollectibleHandler.cs" />
+     <Compile Include="Assets\Scripts\LevelHandler.cs" />
+     <Compile Include="Assets\Scripts\ExitDoorHandler.cs" />
+     <Compile Include="Assets\Scripts\LevelEvents.cs" />
+     <Compile Include="Assets\Scripts\Player\InteractionHandler.cs" />
+     <Compile Include="Assets\Scripts\Enemy\BatController.cs" />
+     <Compile Include="Assets\Scripts\Player\DamageHandler.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
@@ -829,6 +836,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="NavMeshPlus.csproj">
+      <Project>{66d9395e-37ed-bcfe-ff7c-b84a5fcf6602}</Project>
+      <Name>NavMeshPlus</Name>
+    </ProjectReference>
+    <ProjectReference Include="NavMeshPlusEditor.csproj">
+      <Project>{c9376ed5-b60c-23d3-a5e2-d9e5668a4ded}</Project>
+      <Name>NavMeshPlusEditor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

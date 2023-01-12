@@ -173,7 +173,7 @@ public class MovementHandler : MonoBehaviour
     public bool IsTouchingLedge() => grabbingLedge;
     public bool IsRising() => body.velocity.y > 0.1f;
     public bool IsFalling() => body.velocity.y < -0.1f;
-    public bool CanMantle() => canMantle;
+    public bool IsMantle() => canMantle;
     public bool IsCrouching() => crouchRequest;
 
     public void PerformMantle()

@@ -16,7 +16,7 @@ public class AnimationHandler : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
     }
 
-    public void changeAnimation(string newAnimation)
+    public void ChangeAnimation(string newAnimation)
     {
         // Guard to prevent replaying same state
         if (currentAnimation == newAnimation)

@@ -9,4 +9,5 @@ public class Controls : ScriptableObject
     public KeyCode moveLeftKey = KeyCode.LeftArrow;
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode crouchKey = KeyCode.DownArrow;
+    public KeyCode interactKey = KeyCode.UpArrow;
 }
