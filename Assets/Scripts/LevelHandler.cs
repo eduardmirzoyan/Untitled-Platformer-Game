@@ -26,6 +26,9 @@ public class LevelHandler : MonoBehaviour
     {
         // Sub
         LevelEvents.instance.onCollectCollectible += DecrementNumCollectibles;
+
+        // Open scene
+        TransitionManager.instance.OpenScene(Vector3.zero);
     }
 
     private void OnDestroy()

@@ -18,8 +18,18 @@ public class LevelEvents : MonoBehaviour
         instance = this;
     }
 
+    public event Action onLevelEnter;
     public event Action onCollectCollectible;
     public event Action onUnlockExit;
+    public event Action onLevelExit;
+
+    public void TriggerOnLevelEnter()
+    {
+        if (onLevelEnter != null)
+        {
+            onLevelEnter();
+        }
+    }
 
     public void TriggerOnCollectCollectible()
     {
@@ -34,6 +44,14 @@ public class LevelEvents : MonoBehaviour
         if (onUnlockExit != null)
         {
             onUnlockExit();
+        }
+    }
+
+    public void TriggerOnLevelExit()
+    {
+        if (onLevelExit != null)
+        {
+            onLevelExit();
         }
     }
 }

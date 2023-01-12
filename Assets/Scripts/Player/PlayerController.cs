@@ -446,6 +446,9 @@ public class PlayerController : MonoBehaviour
                 // When animation is over...
                 if (animationHandler.IsFinished())
                 {
+                    // Trigger event
+                    LevelEvents.instance.TriggerOnLevelEnter();
+
                     // Change animation
                     animationHandler.ChangeAnimation("Idle");
 
