@@ -11,27 +11,33 @@ public class FogOfWar : MonoBehaviour
     [SerializeField] private Tile fogTile;
     [SerializeField] private Tile revealedWallTile;
     [SerializeField] private Tile revealedEmptyTile;
+
+    [Header("Data")]
     [SerializeField] private Transform discoverer;
 
-    [Header("Components")]
-    [SerializeField] private Vector2 mapSize;
-    [SerializeField] private int discoveryRadius = 11;
+    [Header("Settings")]
+    [SerializeField] private int discoveryRadius = 5;
 
     private void Start()
     {
         // Sub
-        LevelEvents.instance.onLevelEnter += GenerateFog;
+        LevelEvents.instance.onLevelSetup += GenerateFog;
+        LevelEvents.instance.onLevelEnter += SetDiscoverer;
     }
 
 
     private void OnDestroy()
     {
-        LevelEvents.instance.onLevelEnter -= GenerateFog;
+        LevelEvents.instance.onLevelSetup -= GenerateFog;
+        LevelEvents.instance.onLevelEnter -= SetDiscoverer;
     }
 
     // Update discovered tiles
     private void LateUpdate()
     {
+        // Make sure a discoverer is known
+        if (discoverer == null) return;
+
         // Get location in map
         Vector2Int location = (Vector2Int) fogOfWarTileMap.WorldToCell(discoverer.transform.position);
 
@@ -43,15 +49,15 @@ public class FogOfWar : MonoBehaviour
 
                 if ((i - location.x) * (i - location.x) + (j - location.y) * (j - location.y) < discoveryRadius * discoveryRadius)
                 {
-                    // fogOfWarTileMap.SetTile(new Vector3Int(i, j, 0), null);
-                    Reveal(new Vector3Int(i, j, 0));
+                    // Reveal the tile
+                    RevealFog(new Vector3Int(i, j, 0));
                 }
 
             }
         }
     }
 
-    public void GenerateFog()
+    private void GenerateFog(Vector2Int mapSize, List<CollectibleHandler> collectibles)
     {
         // Create a fog tile in every location
         for (int i = 0; i < mapSize.x; i++)
@@ -63,7 +69,13 @@ public class FogOfWar : MonoBehaviour
         }
     }
 
-    private void Reveal(Vector3Int position)
+    private void SetDiscoverer(Transform playerTransform)
+    {
+        // Set discoverer
+        this.discoverer = playerTransform;
+    }
+
+    private void RevealFog(Vector3Int position)
     {
         // Check if revealed tile is a wall or empty
         if (wallTilemap.HasTile(position))

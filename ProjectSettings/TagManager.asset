@@ -42,6 +42,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 1618489581
+    locked: 0
   - name: Ground
     uniqueID: 681619883
     locked: 0
@@ -50,6 +53,9 @@ TagManager:
     locked: 0
   - name: Collectibles
     uniqueID: 771317671
+    locked: 0
+  - name: Particles
+    uniqueID: 1143731601
     locked: 0
   - name: Enemy
     uniqueID: 3166480899

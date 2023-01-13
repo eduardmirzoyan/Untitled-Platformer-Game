@@ -8,7 +8,7 @@ public class InteractionHandler : MonoBehaviour
     [SerializeField] private Collider2D collider2d;
 
     [Header("Data")]
-    [SerializeField] private Vector3 exitLocation;
+    [SerializeField] private bool canExit;
 
     [Header("Settings")]
     [SerializeField] private LayerMask interactionLayer;
@@ -19,14 +19,11 @@ public class InteractionHandler : MonoBehaviour
     private void Awake()
     {
         collider2d = GetComponentInChildren<Collider2D>();
-
-        // Set a null value
-        exitLocation = Vector3.back;
     }
 
     private void Update()
     {
-        if (exitLocation != Vector3.back) exitLocation = Vector3.back;
+        if (canExit) canExit = false;
     }
 
     public void InteractWithSurroundings()
@@ -46,8 +43,8 @@ public class InteractionHandler : MonoBehaviour
                     // Debug
                     if (debugMode) print("Exit is unlocked!");
 
-                    // Save exit
-                    exitLocation = exitDoor.GetExitLocation();
+                    // Set flag
+                    canExit = true;
 
                     // Finish
                     return;
@@ -60,8 +57,8 @@ public class InteractionHandler : MonoBehaviour
             }
         }
 
-        exitLocation = Vector3.back;
+        canExit = false;
     }
 
-    public Vector3 GetExit() => exitLocation;
+    public bool CanExit() => canExit;
 }

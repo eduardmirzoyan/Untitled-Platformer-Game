@@ -23,37 +23,47 @@ public class ExitDoorHandler : MonoBehaviour
     {
         // Sub
         LevelEvents.instance.onUnlockExit += Unlock;
+        LevelEvents.instance.onLevelExit += ExitLevel;
     }
 
     private void OnDestroy()
     {
         // Unsub
         LevelEvents.instance.onUnlockExit += Unlock;
+        LevelEvents.instance.onLevelExit -= ExitLevel;
     }
 
-    private void Unlock()
+    private void Unlock(Transform transform)
     {
-        // If not unlocked before...
-        if (!unlocked)
+        // If this was unlocked...
+        if (this.transform == transform)
         {
-            // Debug
-            if (debugMode) print("Exit unlocked!");
+            // If not unlocked before...
+            if (!unlocked)
+            {
+                // Debug
+                if (debugMode) print("Exit unlocked!");
 
-            // Play animation
-            animationHandler.ChangeAnimation("Unlock");
+                // Play animation
+                animationHandler.ChangeAnimation("Unlock");
 
-            // Change state
-            unlocked = true;
+                // Change state
+                unlocked = true;
+            }
         }
+    }
+
+    private void ExitLevel(Transform playerTransform)
+    {
+        // Relocate player
+        playerTransform.position = exitLocationTransform.position;
+
+        // Exit scene
+        TransitionManager.instance.LoadNextScene(playerTransform.position);
     }
 
     public bool IsUnlocked()
     {
         return unlocked;
-    }
-
-    public Vector3 GetExitLocation()
-    {
-        return exitLocationTransform.position;
     }
 }

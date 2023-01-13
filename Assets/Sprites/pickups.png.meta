@@ -238,7 +238,7 @@ TextureImporter:
         width: 11
         height: 11
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -246,6 +246,153 @@ TextureImporter:
       bones: []
       spriteID: 471b150d7922f0f4691f926a740b5b0e
       internalID: -1251113974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pickups_7
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 687
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc3147a447cdfa74481062eb45fdb61b
+      internalID: 1215553303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pickups_8
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 687
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cdf6c3bc6da4b1449f663cbef947fd3
+      internalID: -181459961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pickups_9
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 687
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 775c0aa044fa1884782c545796fed1ff
+      internalID: 1104358109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pickups_10
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 687
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57ad9950b184a504dbc87232776a6a20
+      internalID: 879455908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pickups_11
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 687
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44da197da7152184296c2848001ab030
+      internalID: 1463871700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pickups_12
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 687
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa398617bd3e82e41be11ec6c44c87f9
+      internalID: 369034568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pickups_13
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 687
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 017830637daee8d479718f3c2c774665
+      internalID: 958110238
       vertices: []
       indices: 
       edges: []
@@ -261,10 +408,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      pickups_8: -181459961
+      pickups_9: 1104358109
+      pickups_11: 1463871700
+      pickups_13: 958110238
       pickups_0: -1052627841
+      pickups_10: 879455908
       pickups_3: 103675417
+      pickups_12: 369034568
       pickups_6: -1251113974
       pickups_4: -1805603162
+      pickups_7: 1215553303
       pickups_5: -361667916
       pickups_1: 378583637
       pickups_2: -1789340534

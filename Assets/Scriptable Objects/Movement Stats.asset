@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 218b52fbe53807948af8d19cd3113055, type: 3}
+  m_Name: Movement Stats
+  m_EditorClassIdentifier: 
+  maxRunSpeed: 5
+  acceleration: 60
+  groundDeceleration: 60
+  airDeceleration: 30
+  jumpPower: 14
+  earlyCancelFactor: 2.5
+  coyoteTime: 0.1
+  jumpBuffer: 0.15
+  maxCrouchWalkSpeed: 1.5
+  maxWallSlideSpeed: 2
+  wallSlideAcceleration: 30
+  wallJumpPower: {x: 10, y: 10}
+  risingGravity: 40
+  fallingGravity: 60
+  maxFallSpeed: 40

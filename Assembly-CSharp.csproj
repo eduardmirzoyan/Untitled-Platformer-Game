@@ -38,36 +38,28 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Player\DamageHandler.cs" />
      <Compile Include="Assets\Scripts\Controls.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\Bouncer.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\PatrolPlatform.cs" />
+     <Compile Include="Assets\Scripts\UI\TimerDisplay.cs" />
+     <Compile Include="Assets\Scripts\UI\GameOverUI.cs" />
      <Compile Include="Assets\Scripts\Audio\Sound.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\_Scripts\BoxBoiAnimator.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\CameraFollow.cs" />
-     <Compile Include="Assets\Scripts\LevelHandler.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\LadderTop.cs" />
+     <Compile Include="Assets\Scripts\UI\CollectiblesDisplay.cs" />
      <Compile Include="Assets\Scripts\Player\InteractionHandler.cs" />
      <Compile Include="Assets\Scripts\UI\Minimap.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\RadialPlatform.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\Explosion.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\UI\MainMenuManager.cs" />
      <Compile Include="Assets\Scripts\CollectibleHandler.cs" />
      <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
      <Compile Include="Assets\Scripts\UI\FogOfWar.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\PlatformBase.cs" />
+     <Compile Include="Assets\Scripts\UI\ArrowPointer.cs" />
      <Compile Include="Assets\Scripts\LevelEvents.cs" />
      <Compile Include="Assets\Scripts\UI\TransitionManager.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\_Scripts\PlayerAnimator.cs" />
-     <Compile Include="Assets\Scripts\UI\CollectiblesUI.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\_Scripts\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\EntranceDoorHandler.cs" />
      <Compile Include="Assets\Scripts\UI\PauseManager.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\Lap.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\_Scripts\PlayerInput.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\TaroTile.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\Demo\Demo Scripts\LapTrigger.cs" />
+     <Compile Include="Assets\Scripts\Player\MovementStats.cs" />
+     <Compile Include="Assets\Scripts\LevelManager.cs" />
+     <Compile Include="Assets\Scripts\Player\JuiceHandler.cs" />
      <Compile Include="Assets\Scripts\ExitDoorHandler.cs" />
+     <Compile Include="Assets\Scripts\UI\PointerManager.cs" />
      <Compile Include="Assets\Scripts\Player\MovementHandler.cs" />
-     <Compile Include="Assets\Scripts\PlayerData.cs" />
-     <Compile Include="Assets\Tarodev 2D Controller\_Scripts\ScriptableStats.cs" />
      <Compile Include="Assets\Scripts\Player\AnimationHandler.cs" />
      <Compile Include="Assets\Scripts\UI\CutoutMaskUI.cs" />
      <Compile Include="Assets\Scripts\Enemy\BatController.cs" />
@@ -810,8 +802,14 @@
     <Reference Include="Unity.2D.IK.Runtime">
         <HintPath>C:\Users\eduar\OneDrive\Desktop\Unity Projects\Untitled-Platformer-Game\Library\ScriptAssemblies\Unity.2D.IK.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Cinemachine">
+        <HintPath>C:\Users\eduar\OneDrive\Desktop\Unity Projects\Untitled-Platformer-Game\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Burst">
         <HintPath>C:\Users\eduar\OneDrive\Desktop\Unity Projects\Untitled-Platformer-Game\Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
+    </Reference>
+    <Reference Include="com.unity.cinemachine.editor">
+        <HintPath>C:\Users\eduar\OneDrive\Desktop\Unity Projects\Untitled-Platformer-Game\Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Shared.Editor">
         <HintPath>C:\Users\eduar\OneDrive\Desktop\Unity Projects\Untitled-Platformer-Game\Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>

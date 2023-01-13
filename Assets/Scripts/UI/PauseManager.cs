@@ -61,18 +61,30 @@ public class PauseManager : MonoBehaviour
         canvasGroup.blocksRaycasts = false;
     }
 
+    public void Restart()
+    {
+        // Resume first
+        Resume();
+
+        // Reload current scene
+        TransitionManager.instance.ReloadScene(Vector3.zero);
+    }
+
     public void MainMenu()
     {
         // Resume first
         Resume();
 
         // Tell game to return to main menu
-        // GameManager.instance.ReturnToMainMenu();
+        TransitionManager.instance.LoadMainMenuScene(Vector3.zero);
     }
 
     public void Quit()
     {
+        // Debug
         Debug.Log("Player quit game.");
+
+        // Quit game
         Application.Quit();
     }
 }

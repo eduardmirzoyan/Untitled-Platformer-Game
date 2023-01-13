@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private enum PlayerState { Idle, Run, Rise, Fall, Crouch, Crouchwalk, Wallslide, Walljump, Wallhang, Mantle, Exiting, Entering, Dead };
+    private enum PlayerState { Idle, Run, Rise, Fall, Crouch, Crouchwalk, Wallslide, Wallhang, Mantle, Exiting, Entering, Dead, Invisible };
 
     [Header("Components")]
     [SerializeField] private InputHandler inputHandler;
@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AnimationHandler animationHandler;
     [SerializeField] private InteractionHandler interactionHandler;
     [SerializeField] private DamageHandler damageHandler;
+    [SerializeField] private JuiceHandler juiceHandler;
 
     [Header("Data")]
     [SerializeField] private PlayerState playerState;
@@ -24,13 +25,33 @@ public class PlayerController : MonoBehaviour
         animationHandler = GetComponent<AnimationHandler>();
         interactionHandler = GetComponent<InteractionHandler>();
         damageHandler = GetComponent<DamageHandler>();
+        juiceHandler = GetComponent<JuiceHandler>();
+
+        // Starting state should be invisible
+        playerState = PlayerState.Invisible;
     }
 
     private void Start()
     {
-        // Set starting state
-        playerState = PlayerState.Entering;
-        animationHandler.ChangeAnimation("Enter");
+        // Sub
+        LevelEvents.instance.onLevelEnter += EnterLevel;
+    }
+
+    private void OnDestroy()
+    {
+        // Unsub
+        LevelEvents.instance.onLevelEnter -= EnterLevel;
+    }
+
+    private void EnterLevel(Transform playerTransform)
+    {
+        if (this.transform == playerTransform)
+        {
+            // Change states
+            playerState = PlayerState.Entering;
+            animationHandler.ChangeAnimation("Enter");
+        }
+        
     }
 
     // Update is called once per frame
@@ -41,6 +62,9 @@ public class PlayerController : MonoBehaviour
         {
             // Stop moving
             movementHandler.Stop();
+
+            // Trigger event
+            LevelEvents.instance.TriggerOnPlayerDeath();
 
             // Change animation
             animationHandler.ChangeAnimation("Dead");
@@ -66,13 +90,13 @@ public class PlayerController : MonoBehaviour
                 HandleInteracting();
 
                 // Check for interacting
-                if (interactionHandler.GetExit() != Vector3.back)
+                if (interactionHandler.CanExit())
                 {
                     // Stop moving
                     movementHandler.Stop();
 
-                    // Relocate
-                    transform.position = interactionHandler.GetExit();
+                    // Trigger event
+                    LevelManager.instance.ExitLevel();
 
                     // Change animation
                     animationHandler.ChangeAnimation("Exit");
@@ -84,6 +108,9 @@ public class PlayerController : MonoBehaviour
                 // Check for running
                 if (movementHandler.IsRunning())
                 {
+                    // Play particles
+                    juiceHandler.ToggleRunning(true);
+
                     // Change animation
                     animationHandler.ChangeAnimation("Run");
 
@@ -92,7 +119,7 @@ public class PlayerController : MonoBehaviour
                 }
 
                 // Check for crouching
-                if (inputHandler.GetCrouchKey())
+                if (movementHandler.IsCrouching())
                 {
                     // Enable crouch
                     movementHandler.StartCrouch();
@@ -107,6 +134,9 @@ public class PlayerController : MonoBehaviour
                 // Check for jumping
                 if (!movementHandler.IsGrounded())
                 {
+                    // Play particles
+                    juiceHandler.PlayJump();
+
                     // Change animation
                     animationHandler.ChangeAnimation("Rise");
 
@@ -140,13 +170,16 @@ public class PlayerController : MonoBehaviour
                 HandleInteracting();
 
                 // Check for interacting
-                if (interactionHandler.GetExit() != Vector3.back)
+                if (interactionHandler.CanExit())
                 {
                     // Stop moving
                     movementHandler.Stop();
 
-                    // Relocate
-                    transform.position = interactionHandler.GetExit();
+                    // Trigger event
+                    LevelManager.instance.ExitLevel();
+
+                    // Play particles
+                    juiceHandler.ToggleRunning(false);
 
                     // Change animation
                     animationHandler.ChangeAnimation("Exit");
@@ -158,6 +191,9 @@ public class PlayerController : MonoBehaviour
                 // Check for idling
                 if (!movementHandler.IsRunning())
                 {
+                    // Play particles
+                    juiceHandler.ToggleRunning(false);
+
                     // Change animation
                     animationHandler.ChangeAnimation("Idle");
 
@@ -168,6 +204,9 @@ public class PlayerController : MonoBehaviour
                 // Check for crouch walk
                 if (movementHandler.IsCrouching())
                 {
+                    // Play particles
+                    juiceHandler.ToggleRunning(false);
+
                     // Change animation
                     animationHandler.ChangeAnimation("Crouch Walk");
 
@@ -177,6 +216,12 @@ public class PlayerController : MonoBehaviour
 
                 if (!movementHandler.IsGrounded())
                 {
+                    // Play particles
+                    juiceHandler.ToggleRunning(false);
+
+                    // Play particles
+                    juiceHandler.PlayJump();
+
                     // Change animation
                     animationHandler.ChangeAnimation("Rise");
 
@@ -187,6 +232,9 @@ public class PlayerController : MonoBehaviour
                 // Check for falling
                 if (movementHandler.IsFalling())
                 {
+                    // Play particles
+                    juiceHandler.ToggleRunning(false);
+
                     // Change animation
                     animationHandler.ChangeAnimation("Fall");
 
@@ -203,6 +251,16 @@ public class PlayerController : MonoBehaviour
                 // Handle jump cancel
                 if (inputHandler.GetJumpInputUp()) movementHandler.EndJumpEarly();
 
+                // Check for landing
+                if (movementHandler.IsGrounded())
+                {
+                    // Change animation
+                    animationHandler.ChangeAnimation("Idle");
+
+                    // Change states
+                    playerState = PlayerState.Idle;
+                }
+
                 // Check for falling
                 if (movementHandler.IsFalling())
                 {
@@ -211,16 +269,6 @@ public class PlayerController : MonoBehaviour
 
                     // Change states
                     playerState = PlayerState.Fall;
-                }
-
-                // Check for ledge
-                if (movementHandler.IsTouchingLedge())
-                {
-                    // Change animation
-                    animationHandler.ChangeAnimation("Hang");
-
-                    // Change states
-                    playerState = PlayerState.Wallhang;
                 }
 
                 break;
@@ -232,9 +280,12 @@ public class PlayerController : MonoBehaviour
                 // Handle jumping
                 HandleJumping();
 
-                // Check for idling
+                // Check for landing
                 if (movementHandler.IsGrounded())
                 {
+                    // Play particles
+                    juiceHandler.PlayLand();
+
                     // Change animation
                     animationHandler.ChangeAnimation("Idle");
 
@@ -263,7 +314,7 @@ public class PlayerController : MonoBehaviour
                 }
 
                 // Handle wall sliding
-                if (movementHandler.IsWallSliding() && inputHandler.GetMoveInput())
+                if (movementHandler.IsWallSliding())
                 {
                     // Change animation
                     animationHandler.ChangeAnimation("Wallslide");
@@ -329,6 +380,9 @@ public class PlayerController : MonoBehaviour
                     // Disable crouch
                     movementHandler.EndCrouch();
 
+                    // Play particles
+                    juiceHandler.ToggleRunning(true);
+
                     // Change animation
                     animationHandler.ChangeAnimation("Run");
 
@@ -369,7 +423,7 @@ public class PlayerController : MonoBehaviour
                 }
 
                 // Check for fall
-                if (!inputHandler.GetMoveInput())
+                if (!movementHandler.IsWallSliding())
                 {
                     // Change animation
                     animationHandler.ChangeAnimation("Fall");
@@ -387,10 +441,6 @@ public class PlayerController : MonoBehaviour
                     // Change states
                     playerState = PlayerState.Idle;
                 }
-
-                break;
-            case PlayerState.Walljump:
-                // TODO?
 
                 break;
             case PlayerState.Wallhang:
@@ -411,7 +461,8 @@ public class PlayerController : MonoBehaviour
                     playerState = PlayerState.Rise;
                 }
 
-                if (movementHandler.IsMantle())
+                // Check for mantle
+                if (movementHandler.IsMantling())
                 {
                     // Change animation
                     animationHandler.ChangeAnimation("Mantle");
@@ -423,6 +474,7 @@ public class PlayerController : MonoBehaviour
                 break;
             case PlayerState.Mantle:
 
+                // Wait til animation is over
                 if (animationHandler.IsFinished())
                 {
                     // Move model
@@ -438,7 +490,15 @@ public class PlayerController : MonoBehaviour
                 break;
             case PlayerState.Exiting:
 
-                // Do nothing
+                // When animation is over
+                if (animationHandler.IsFinished())
+                {
+                    // Change animation
+                    animationHandler.ChangeAnimation("Invisible");
+
+                    // Change states
+                    playerState = PlayerState.Invisible;
+                }
 
                 break;
             case PlayerState.Entering:
@@ -447,7 +507,7 @@ public class PlayerController : MonoBehaviour
                 if (animationHandler.IsFinished())
                 {
                     // Trigger event
-                    LevelEvents.instance.TriggerOnLevelEnter();
+                    LevelEvents.instance.TriggerOnLockEntrance();
 
                     // Change animation
                     animationHandler.ChangeAnimation("Idle");
@@ -458,6 +518,11 @@ public class PlayerController : MonoBehaviour
 
                 break;
             case PlayerState.Dead:
+
+                // Do nothing...
+
+                break;
+            case PlayerState.Invisible:
                 
                 // Do nothing...
 

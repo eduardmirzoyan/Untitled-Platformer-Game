@@ -12,9 +12,8 @@ public class TransitionManager : MonoBehaviour
 
     [Header("Data")]
     [SerializeField] private float transitionTime = 1f;
-
-
     private Coroutine coroutine;
+    
     public static TransitionManager instance;
     private void Awake()
     {
@@ -29,7 +28,7 @@ public class TransitionManager : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
     }
 
-    public int GetSceneIndex()
+    private int GetSceneIndex()
     {
         return SceneManager.GetActiveScene().buildIndex;
     }
@@ -111,7 +110,24 @@ public class TransitionManager : MonoBehaviour
         // Wait
         yield return new WaitForSeconds(transitionTime);
 
-        // Load scene
-        SceneManager.LoadScene(index);
+        // Check if next scene exists
+        int maxCount = SceneManager.sceneCountInBuildSettings;
+        if (index < maxCount)
+        {
+            // Load scene
+            SceneManager.LoadScene(index);
+        }
+        else 
+        {
+            // Debug
+            print("Could not find scene " + index);
+
+            // Load scene 0
+            SceneManager.LoadScene(0);
+        }
+
+        
     }
+
+    public float GetTransitionTime() => transitionTime;
 }

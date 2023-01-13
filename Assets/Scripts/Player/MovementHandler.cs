@@ -9,69 +9,38 @@ public class MovementHandler : MonoBehaviour
     [SerializeField] private Collider2D hurtBox;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
-    [Header("General Data")]
-    [SerializeField] private Vector2 currentVelocity;
-    [SerializeField] private bool isFacingRight;
+    [Header("Time Data")]
+    [SerializeField] private float timeSinceGrounded;
+    [SerializeField] private float timeSinceWall;
+    [SerializeField] private float jumpInputTime;
 
-    [Header("Run Data")]
-    [SerializeField] private int moveRequest;
-
-    [Header("Jump Data")]
-    [SerializeField] private bool isJumping;
-    [SerializeField] private bool endJumpRequest;
-    [SerializeField] private float jumpInputTime = -1f;
-    [SerializeField] private float timeSinceGrounded = -1f;
+    [Header("Frame Data")]
     [SerializeField] private bool groundedThisFrame;
     [SerializeField] private bool groundedLastFrame;
-
-
-    [Header("Wallslide Data")]
     [SerializeField] private int onWallThisFrame;
     [SerializeField] private int onWallLastFrame;
-    [SerializeField] private bool isWallSliding;
-
-    [Header("Walljump Data")]
-    [SerializeField] private bool walljumpRequest;
-
-    [Header("Wallhang Data")]
     [SerializeField] private bool onLedgeThisFrame;
     [SerializeField] private bool onLedgeLastFrame;
-    [SerializeField] private bool grabbingLedge;
 
-    [Header("Mantle Data")]
-    [SerializeField] private bool canMantle;
+    [Header("States")]
+    [SerializeField] private bool isFacingRight;
+    [SerializeField] private int moveRequest;
+    [SerializeField] private bool isJumping;
+    [SerializeField] private bool endJumpRequest;
+    [SerializeField] private bool crouchRequest;
+    [SerializeField] private bool isWallSliding;
+    [SerializeField] private bool isWallHanging;
+    [SerializeField] private bool isMantling;
 
-    [Header("Other Settings")]
+    [Header("Settings")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float checkThickness = 0.02f;
 
-    [Header("Run Settings")]
-    [SerializeField] private float maxRunSpeed = 4f;
-    [SerializeField] private float acceleration = 0.1f;
-    [SerializeField] private float groundDeceleration = 60f;
-    [SerializeField] private float airDeceleration = 30f;
+    [Header("Debugging")]
+    [SerializeField] private Vector2 currentVelocity;
 
-    [Header("Jump Settings")]
-    [SerializeField] private float jumpPower = 5f;
-    [SerializeField] private float earlyCancelFactor = 3f;
-    [SerializeField] private float coyoteTime = 0.1f;
-    [SerializeField] private float jumpBuffer = 0.1f;
-
-    [Header("Crouch Settings")]
-    [SerializeField] private bool crouchRequest;
-    [SerializeField] private float maxCrouchwalkSpeed = 2f;
-
-    [Header("Wallslide Settings")]
-    [SerializeField] private float maxWallslideSpeed = 2f;
-    [SerializeField] private float wallSlideAcceleration = 30f;
-
-    [Header("Wallslide Settings")]
-    [SerializeField] private Vector2 walljumpPower = new Vector2(10, 8);
-
-    [Header("Gravity Settings")]
-    [SerializeField] private float risingGravity = 20f;
-    [SerializeField] private float fallingGravity = 40f;
-    [SerializeField] private float maxFallSpeed = 40;
+    [Header("Stats")]
+    [SerializeField] private MovementStats stats;
 
     private void Awake()
     {
@@ -80,43 +49,14 @@ public class MovementHandler : MonoBehaviour
         hurtBox = GetComponentInChildren<Collider2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
-        // Set default state
+        // Set default states
         isFacingRight = true;
+        jumpInputTime = -1f;
+        timeSinceGrounded = -1f;
+        timeSinceWall = -1f;
     }
 
-    private void Update()
-    {
-        CheckCollisions();
-
-        CheckWalls();
-
-        HandleJumping();
-
-        HandleHorizontalMovement();
-
-        HandleVerticalMovement();
-
-        // Set velocity
-        FlipModel(currentVelocity.x);
-        body.velocity = currentVelocity;
-        
-
-        // If was grounded and now not
-        if (groundedLastFrame && !groundedThisFrame)
-        {
-            // Save time
-            timeSinceGrounded = Time.time;
-        }
-
-        // Update grounded state
-        groundedLastFrame = groundedThisFrame;
-
-        // Update wall state
-        onWallLastFrame = onWallThisFrame;
-
-        // Update ledge state
-        onLedgeLastFrame = onLedgeThisFrame;
-    }
+    #region Input
 
     public void Stop()
     {
@@ -126,16 +66,11 @@ public class MovementHandler : MonoBehaviour
     public void MoveRight()
     {
         moveRequest = 1;
-
-        // FlipModel(moveRequest);
     }
-
 
     public void MoveLeft()
     {
         moveRequest = -1;
-
-        // FlipModel(moveRequest);
     }
 
     public void StartCrouch()
@@ -152,51 +87,69 @@ public class MovementHandler : MonoBehaviour
     {
         // Store time
         jumpInputTime = Time.time;
-
-        // Check if wallsliding rn
-        if (onWallThisFrame != 0)
-        {
-            // Initate walljump
-            walljumpRequest = true;
-        }
     }
 
     public void EndJumpEarly()
     {
-        // Set flag
-        endJumpRequest = true;
+        // If you are mid jump
+        if (isJumping)
+        {
+            // Set flag
+            endJumpRequest = true;
+
+            // Disable flag
+            isJumping = false;
+        }
+        
+    }
+
+    #endregion
+
+    private void Update()
+    {
+        CheckCollisions();
+
+        CheckWalls();
+
+        HandleJumping();
+
+        HandleHorizontalMovement();
+
+        HandleVerticalMovement();
+
+        ApplyVelocity();
+        
+        UpdatePreviousStates();
     }
 
     public bool IsRunning() => Mathf.Abs(currentVelocity.x) > 0.1f;
     public bool IsGrounded() => groundedThisFrame;
     public bool IsWallSliding() => isWallSliding;
-    public bool IsTouchingLedge() => grabbingLedge;
-    public bool IsRising() => body.velocity.y > 0.1f;
-    public bool IsFalling() => body.velocity.y < -0.1f;
-    public bool IsMantle() => canMantle;
+    public bool IsTouchingLedge() => isWallHanging;
+    public bool IsRising() => !groundedThisFrame && body.velocity.y > 0.1f;
+    public bool IsFalling() => !groundedThisFrame && body.velocity.y < -0.1f;
+    public bool IsMantling() => isMantling;
     public bool IsCrouching() => crouchRequest;
 
     public void PerformMantle()
     {
-        // If you are mantling
-        if (canMantle)
+        // Must be mantling before hand
+        if (isMantling)
         {
-            // Move model to top
-
             // Get corner of ledge check based on which wall u are on
             var corner = hurtBox.bounds.center + new Vector3(onWallThisFrame * hurtBox.bounds.extents.x, hurtBox.bounds.extents.y, 0f);
 
             // Get offset
             var offset = new Vector3(onWallThisFrame * hurtBox.bounds.extents.x, hurtBox.bounds.extents.y, 0f);
 
+            // Relocate transform
             transform.position = corner + offset;
+
+            // Flip model to face away of the wall they climbed
+            FlipModel(-onWallThisFrame);
             
             // Disable flag
-            grabbingLedge = false;
-            canMantle = false;
-
-            // Flip model
-            FlipModel(-moveRequest);
+            isMantling = false;
         }
     }
     
@@ -210,53 +163,59 @@ public class MovementHandler : MonoBehaviour
 
     private void CheckWalls()
     {
-        // Make sure you are not grounded
-        if (!groundedThisFrame)
+        CheckMantling();
+
+        CheckWallHanging();
+
+        CheckWallSliding();
+    }
+
+    private void CheckMantling()
+    {
+        // You must previously be hanging then moving in the same direction as the wall you are on and then jump
+        if (isWallHanging &&  onWallThisFrame == moveRequest && JumpWithinBuffer())
         {
-            // If you are on a ledge
-            if (grabbingLedge)
-            {
-                // You are moving in the same direction as the wall and jumping
-                if (WithinBufferTime() && onWallThisFrame == moveRequest)
-                {
-                    // Allow mantle
-                    canMantle = true;
-                }
-            }
-            
+            // Toggle mantling
+            isMantling = true;
 
-            // On wall but no ledge last frame
-            if (onWallLastFrame != 0 && !onLedgeLastFrame)
-            {
-                // You are on wall now, but no ledge
-                if (onWallThisFrame != 0 && onLedgeThisFrame)
-                {
-                    // Grab ledge
-                    grabbingLedge = true;
+            // Disable wall hanging
+            isWallHanging = false;
+        }
+    }
 
-                    // Stop wall sliding
-                    isWallSliding = false;
-                }
-            }
+    private void CheckWallHanging()
+    {   
+        // On wall but no ledge LAST frame => now on wall and on ledge THIS frame
+        if (IsFalling() && onWallLastFrame != 0 && !onLedgeLastFrame && onWallThisFrame != 0 && onLedgeThisFrame)
+        {
+            // Toggle hanging
+            isWallHanging = true;
+        }
+    }
 
-            if (!grabbingLedge && onWallThisFrame != 0 && onWallThisFrame == moveRequest && onLedgeThisFrame)
-            {
-                // Start wall sliding
-                isWallSliding = true;
-            }
-            else
-            {
-                isWallSliding = false;
-            }
+    private void CheckWallSliding()
+    {
+        // You must be falling, on ledge and wall, and moving into the wall
+        if (!isWallHanging && IsFalling() && onLedgeThisFrame && onWallThisFrame != 0 && onWallThisFrame == moveRequest)
+        {
+            isWallSliding = true;
+        }
+        // Else stop sliding
+        else
+        {
+            isWallSliding = false;
         }
     }
 
     private void HandleHorizontalMovement()
     {
         // Check if player is on wall
-        if (isWallSliding || grabbingLedge || canMantle)
+        if (isWallSliding || isWallHanging || isMantling)
         {
+            // Don't move horizontally
             currentVelocity.x = 0f;
+
+            // Finish
             return;
         }
 
@@ -270,16 +229,16 @@ public class MovementHandler : MonoBehaviour
             if (crouchRequest)
             {
                 // Calculate target speed using crouchwalk
-                targetSpeed = moveRequest * maxCrouchwalkSpeed;
+                targetSpeed = moveRequest * stats.maxCrouchWalkSpeed;
             }
             else 
             {
                 // Calculate target speed
-                targetSpeed = moveRequest * maxRunSpeed;
+                targetSpeed = moveRequest * stats.maxRunSpeed;
             }
 
             // Accelerate
-            currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, targetSpeed, acceleration * Time.deltaTime);
+            currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, targetSpeed, stats.acceleration * Time.deltaTime);
         }
         else
         {
@@ -287,97 +246,101 @@ public class MovementHandler : MonoBehaviour
             if (groundedThisFrame)
             {
                 // Decelerate to 0
-                currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, 0, groundDeceleration * Time.deltaTime);
+                currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, 0, stats.groundDeceleration * Time.deltaTime);
             }
             else
             {
                 // Decelerate to 0
-                currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, 0, airDeceleration * Time.deltaTime);
+                currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, 0, stats.airDeceleration * Time.deltaTime);
             }
-
         }
     }
 
     private void HandleJumping()
     {
         // Make sure you are within buffer time
-        if (!canMantle && WithinBufferTime())
+        if (!isMantling && JumpWithinBuffer())
         {
-            // Debug
-            // print(Time.time - jumpInputTime);
-
             // Make sure you are grounded OR within coyote time
-            if (groundedThisFrame || WithinCoyoteTime())
+            if (groundedThisFrame || JumpWithinCoyote())
             {
-                // Debug
-                // print(Time.time - timeSinceGrounded);
-
                 // Add jumpower
-                currentVelocity.y = jumpPower;
+                currentVelocity.y = stats.jumpPower;
 
-                // Reset times
+                // Reset timers
                 jumpInputTime = -1f;
                 timeSinceGrounded = -1f;
 
                 // Set flag
                 isJumping = true;
-                grabbingLedge = false;
-                isWallSliding = false;
             }
-            // If you are on a wall, then wall jump instead
-            else if (onWallThisFrame != 0 || WithinCoyoteTime())
+            // If you are on a wall sliding or wallhaning, then wall jump instead
+            else if (onWallThisFrame != 0 || WallJumpWithinCoyote())
             {
                 // Wall jump
-                currentVelocity = Vector2.Scale(walljumpPower, new Vector2(-onWallThisFrame, 1));
+                currentVelocity = Vector2.Scale(stats.wallJumpPower, new Vector2(-onWallThisFrame, 1));
 
-                // Debug
-                print("WALLJUMP: " + currentVelocity);
-
-                // Reset times
+                // Reset timers
                 jumpInputTime = -1f;
-                timeSinceGrounded = -1f;
+                timeSinceWall = -1f;
 
-                // Reset
-                // onWallThisFrame = 0;
+                // Stop wall hanging or sliding
+                isWallHanging = false;
+                isWallSliding = false;
 
                 // Set flag
                 isJumping = true;
-                grabbingLedge = false;
-                isWallSliding = false;
             }
         }
 
         // Check if jump is ended early
-        if (endJumpRequest && isJumping)
+        if (endJumpRequest)
         {
             // Reduce current velocity by a factor
-            currentVelocity.y /= earlyCancelFactor;
+            currentVelocity.y /= stats.earlyCancelFactor;
 
             // Set flags
             endJumpRequest = false;
-            isJumping = false;
         }
     }
 
     private void HandleVerticalMovement()
     {
+        // If you are hanging or mantling
+        if (isWallHanging || isMantling)
+        {
+            // Don't fall
+            currentVelocity.y = 0;
+
+            // Finish
+            return;
+        }
+
+        // If you JUST landed
+        if (!groundedLastFrame && groundedThisFrame)
+        {
+            // Remove y vel
+            currentVelocity.y = 0f;
+
+            // Finish
+            return;
+        }
+
         // If you are airborne
         if (!groundedThisFrame)
         {
-            // If you are grabbing ledge
-            if (grabbingLedge) 
-            {
-                // Don't move
-                currentVelocity.y = 0;
-
-                return;
-            }
-
             // Apply different gravity based on state
             if (IsRising())
             {
+                // Check if you hit your head on the ceiling
+                if (TouchHead())
+                {
+                    // Set y vel to 0
+                    currentVelocity.y = 0;
+                }
+
                 // Apply weaker gravity
-                currentVelocity.y = Mathf.MoveTowards(currentVelocity.y, -maxFallSpeed, risingGravity * Time.deltaTime);
+                currentVelocity.y = Mathf.MoveTowards(currentVelocity.y, -stats.maxFallSpeed, stats.risingGravity * Time.deltaTime);
             }
             // If you are falling
             else 
@@ -386,26 +349,20 @@ public class MovementHandler : MonoBehaviour
                 if (isWallSliding)
                 {
                     // Start wallsliding
-                    currentVelocity.y = Mathf.MoveTowards(currentVelocity.y, -maxWallslideSpeed, wallSlideAcceleration * Time.deltaTime);
+                    currentVelocity.y = Mathf.MoveTowards(currentVelocity.y, -stats.maxWallSlideSpeed, stats.wallSlideAcceleration * Time.deltaTime);
                 }
                 else 
                 {
                     // Apply stronger gravity
-                    currentVelocity.y = Mathf.MoveTowards(currentVelocity.y, -maxFallSpeed, fallingGravity * Time.deltaTime);
+                    currentVelocity.y = Mathf.MoveTowards(currentVelocity.y, -stats.maxFallSpeed, stats.fallingGravity * Time.deltaTime);
                 }
             }
         }
-
-        // If you were airborne and now are not
-        if (!groundedLastFrame && groundedThisFrame)
-        {
-            // Remove y vel
-            currentVelocity.y = 0f;
-        }
     }
 
-    private bool WithinBufferTime() => Time.time - jumpInputTime <= jumpBuffer;
-    private bool WithinCoyoteTime() => Time.time - timeSinceGrounded <= coyoteTime;
+    private bool JumpWithinBuffer() => Time.time - jumpInputTime <= stats.jumpBuffer;
+    private bool JumpWithinCoyote() => Time.time - timeSinceGrounded <= stats.coyoteTime;
+    private bool WallJumpWithinCoyote() => Time.time - timeSinceWall <= stats.coyoteTime;
 
     private bool CalcTouchGround()
     {
@@ -444,14 +401,17 @@ public class MovementHandler : MonoBehaviour
 
     private bool CalcTouchLedge()
     {
-        // if (wallHangThisFrame) return true;
-
         // Look for ledge
         var position = hurtBox.bounds.center + new Vector3(0f, hurtBox.bounds.extents.y, 0f);
         var size = new Vector2(hurtBox.bounds.size.x + checkThickness, checkThickness);
-        var hitLedge = Physics2D.OverlapBox(position, size, 0, groundLayer);
+        return Physics2D.OverlapBox(position, size, 0, groundLayer);
+    }
 
-        return hitLedge;
+    private bool TouchHead()
+    {
+        var position = hurtBox.bounds.center + new Vector3(0f, hurtBox.bounds.extents.y, 0f);
+        var size = new Vector2(0.9f * hurtBox.bounds.size.x, checkThickness);
+        return Physics2D.OverlapBox(position, size, 0, groundLayer);
     }
 
     private void FlipModel(float direction)
@@ -468,6 +428,41 @@ public class MovementHandler : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 180, 0);
             isFacingRight = false;
         }
+    }
+
+    private void ApplyVelocity()
+    {
+        // Set velocity
+        body.velocity = currentVelocity;
+
+        // Flip model if neccissary
+        FlipModel(currentVelocity.x);
+    }
+
+    private void UpdatePreviousStates()
+    {
+        // If was grounded and now not
+        if (groundedLastFrame && !groundedThisFrame)
+        {
+            // Save time
+            timeSinceGrounded = Time.time;
+        }
+
+        // If was on wall and now not
+        if (onWallLastFrame != 0 && onWallThisFrame != onWallLastFrame)
+        {
+            // Save time
+            timeSinceWall = Time.time;
+        }
+
+        // Update grounded state
+        groundedLastFrame = groundedThisFrame;
+
+        // Update wall state
+        onWallLastFrame = onWallThisFrame;
+
+        // Update ledge state
+        onLedgeLastFrame = onLedgeThisFrame;
     }
 
     private void OnDrawGizmosSelected()
@@ -494,6 +489,12 @@ public class MovementHandler : MonoBehaviour
         Gizmos.color = Color.yellow;
         position = hurtBox.bounds.center + new Vector3(0f, hurtBox.bounds.extents.y, 0f);
         size = new Vector2(hurtBox.bounds.size.x + checkThickness, checkThickness);
+        Gizmos.DrawWireCube(position, size);
+
+        // Head check
+        Gizmos.color = Color.magenta;
+        position = hurtBox.bounds.center + new Vector3(0f, hurtBox.bounds.extents.y, 0f);
+        size = new Vector2(0.9f * hurtBox.bounds.size.x, checkThickness);
         Gizmos.DrawWireCube(position, size);
     }
 }

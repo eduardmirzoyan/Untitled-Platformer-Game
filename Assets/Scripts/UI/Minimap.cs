@@ -4,22 +4,21 @@ using UnityEngine;
 
 public class Minimap : MonoBehaviour
 {
-    [SerializeField] private Vector2 mapSize;
     [SerializeField] private Camera cam;
 
     private void Start()
     {
         // Sub
-        LevelEvents.instance.onLevelEnter += Center;
+        LevelEvents.instance.onLevelSetup += CenterMinimap;
     }
 
     private void OnDestroy()
     {
         // Unsub
-        LevelEvents.instance.onLevelEnter -= Center;
+        LevelEvents.instance.onLevelSetup -= CenterMinimap;
     }
 
-    private void Center()
+    private void CenterMinimap(Vector2Int mapSize, List<CollectibleHandler> collectibles)
     {
         // Center camera in the middle of map
         transform.position = new Vector3(mapSize.x / 2, mapSize.y / 2, transform.position.z);

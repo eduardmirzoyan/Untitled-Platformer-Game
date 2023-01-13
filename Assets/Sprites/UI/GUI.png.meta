@@ -187,6 +187,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: GUI_4
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 258
+        width: 44
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 5, y: 5, z: 5, w: 5}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e3a6cedbe1caff418e7859896e77a4a
+      internalID: 1560857362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -198,6 +219,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      GUI_4: 1560857362
       GUI_0: 1570110981
       GUI_3: -894220545
       GUI_2: -1733242713

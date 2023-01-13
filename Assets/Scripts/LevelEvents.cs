@@ -18,40 +18,67 @@ public class LevelEvents : MonoBehaviour
         instance = this;
     }
 
-    public event Action onLevelEnter;
-    public event Action onCollectCollectible;
-    public event Action onUnlockExit;
-    public event Action onLevelExit;
+    public event Action<Vector2Int, List<CollectibleHandler>> onLevelSetup;
+    public event Action<Transform> onLevelEnter;
+    public event Action onLockEntrance;
+    public event Action<CollectibleHandler> onCollect;
+    public event Action onPlayerDeath;
+    public event Action<Transform> onUnlockExit;
+    public event Action<Transform> onLevelExit;
 
-    public void TriggerOnLevelEnter()
+    public void TriggerOnLevelSetup(Vector2Int mapSize, List<CollectibleHandler> collectibles)
+    {
+        if (onLevelSetup != null)
+        {
+            onLevelSetup(mapSize, collectibles);
+        }
+    }
+
+    public void TriggerOnLevelEnter(Transform playerTransform)
     {
         if (onLevelEnter != null)
         {
-            onLevelEnter();
+            onLevelEnter(playerTransform);
         }
     }
 
-    public void TriggerOnCollectCollectible()
+    public void TriggerOnLockEntrance()
     {
-        if (onCollectCollectible != null)
+        if (onLockEntrance != null)
         {
-            onCollectCollectible();
+            onLockEntrance();
         }
     }
 
-    public void TriggerOnUnlockExit()
+    public void TriggerOnCollect(CollectibleHandler collectibleHandler)
+    {
+        if (onCollect != null)
+        {
+            onCollect(collectibleHandler);
+        }
+    }
+
+    public void TriggerOnPlayerDeath()
+    {
+        if (onPlayerDeath != null)
+        {
+            onPlayerDeath();
+        }
+    }
+
+    public void TriggerOnUnlockExit(Transform transform)
     {
         if (onUnlockExit != null)
         {
-            onUnlockExit();
+            onUnlockExit(transform);
         }
     }
 
-    public void TriggerOnLevelExit()
+    public void TriggerOnLevelExit(Transform playerTransform)
     {
         if (onLevelExit != null)
         {
-            onLevelExit();
+            onLevelExit(playerTransform);
         }
     }
 }
