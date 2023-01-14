@@ -40,9 +40,6 @@ public class LevelManager : MonoBehaviour
         FindCollectibles();
         FindExit();
 
-        // Open scene
-        TransitionManager.instance.OpenScene(player.transform.position);
-
         // Start level after scene is opened
         StartCoroutine(DelayedStart(TransitionManager.instance.GetTransitionTime()));
     }
@@ -63,6 +60,9 @@ public class LevelManager : MonoBehaviour
 
         // Wait a few
         yield return new WaitForSeconds(duration);
+
+        // Open scene
+        TransitionManager.instance.OpenScene(player.transform.position);
 
         // Trigger event
         LevelEvents.instance.TriggerOnLevelEnter(player.transform);

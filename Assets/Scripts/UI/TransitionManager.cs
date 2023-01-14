@@ -35,6 +35,8 @@ public class TransitionManager : MonoBehaviour
 
     public void OpenScene(Vector3 location)
     {
+        print("OPEN!~~~~~~~~~~~");
+
         // Save child location
         var temp = backgroundTransform.position;
 
@@ -50,14 +52,31 @@ public class TransitionManager : MonoBehaviour
         // Play animation
         animator.Play("Transition In");
 
-        // Play background music
-        AudioManager.instance.Play("Background " + GetSceneIndex());
+        if (GetSceneIndex() == 0)
+        {
+            // Play title music
+            AudioManager.instance.PlayMusic("Background " + 0);
+        }
+        else 
+        {
+            // Play background music
+            AudioManager.instance.PlayMusic("Background " + 1);
+        }
     }
 
     public void LoadNextScene(Vector3 location)
     {
         // Stop any background music
-        AudioManager.instance.Stop("Background " + GetSceneIndex());
+        if (GetSceneIndex() == 0)
+        {
+            // Play title music
+            AudioManager.instance.StopMusic("Background " + 0);
+        }
+        else
+        {
+            // Play background music
+            AudioManager.instance.StopMusic("Background " + 1);
+        }
 
         // Stop any transition if one was happening
         if (coroutine != null) StopCoroutine(coroutine);
@@ -69,7 +88,16 @@ public class TransitionManager : MonoBehaviour
     public void ReloadScene(Vector3 location)
     {
         // Stop any background music
-        AudioManager.instance.Stop("Background " + GetSceneIndex());
+        if (GetSceneIndex() == 0)
+        {
+            // Play title music
+            AudioManager.instance.StopMusic("Background " + 0);
+        }
+        else
+        {
+            // Play background music
+            AudioManager.instance.StopMusic("Background " + 1);
+        }
         
         // Stop any transition if one was happening
         if (coroutine != null) StopCoroutine(coroutine);
@@ -81,7 +109,16 @@ public class TransitionManager : MonoBehaviour
     public void LoadMainMenuScene(Vector3 location)
     {
         // Stop any background music
-        AudioManager.instance.Stop("Background " + GetSceneIndex());
+        if (GetSceneIndex() == 0)
+        {
+            // Play title music
+            AudioManager.instance.StopMusic("Background " + 0);
+        }
+        else
+        {
+            // Play background music
+            AudioManager.instance.StopMusic("Background " + 1);
+        }
 
         // Stop any transition if one was happening
         if (coroutine != null) StopCoroutine(coroutine);

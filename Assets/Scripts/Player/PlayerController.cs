@@ -61,13 +61,16 @@ public class PlayerController : MonoBehaviour
         if (playerState != PlayerState.Dead && damageHandler.IsHurt())
         {
             // Stop moving
-            movementHandler.Stop();
-
-            // Trigger event
-            LevelEvents.instance.TriggerOnPlayerDeath();
+            movementHandler.Die();
 
             // Change animation
             animationHandler.ChangeAnimation("Dead");
+
+            // Play sound
+            AudioManager.instance.Play("Hurt");
+
+            // Trigger event
+            LevelEvents.instance.TriggerOnPlayerDeath();
 
             // Change states
             playerState = PlayerState.Dead;
@@ -95,6 +98,9 @@ public class PlayerController : MonoBehaviour
                     // Stop moving
                     movementHandler.Stop();
 
+                    // Don't get hit
+                    damageHandler.SetInvincible();
+
                     // Trigger event
                     LevelManager.instance.ExitLevel();
 
@@ -110,6 +116,9 @@ public class PlayerController : MonoBehaviour
                 {
                     // Play particles
                     juiceHandler.ToggleRunning(true);
+
+                    // Play sound
+                    AudioManager.instance.Play("Run");
 
                     // Change animation
                     animationHandler.ChangeAnimation("Run");
@@ -136,6 +145,9 @@ public class PlayerController : MonoBehaviour
                 {
                     // Play particles
                     juiceHandler.PlayJump();
+
+                    // Play sound
+                    AudioManager.instance.Play("Jump");
 
                     // Change animation
                     animationHandler.ChangeAnimation("Rise");
@@ -175,14 +187,21 @@ public class PlayerController : MonoBehaviour
                     // Stop moving
                     movementHandler.Stop();
 
-                    // Trigger event
-                    LevelManager.instance.ExitLevel();
-
+                    // Don't get hit
+                    damageHandler.SetInvincible();
+                    
                     // Play particles
                     juiceHandler.ToggleRunning(false);
 
+                    // Stop sound
+                    AudioManager.instance.Stop("Run");
+
                     // Change animation
                     animationHandler.ChangeAnimation("Exit");
+
+                    // Trigger event
+                    LevelManager.instance.ExitLevel();
+
 
                     // Change states
                     playerState = PlayerState.Exiting;
@@ -193,6 +212,9 @@ public class PlayerController : MonoBehaviour
                 {
                     // Play particles
                     juiceHandler.ToggleRunning(false);
+
+                    // Stop sound
+                    AudioManager.instance.Stop("Run");
 
                     // Change animation
                     animationHandler.ChangeAnimation("Idle");
@@ -207,6 +229,9 @@ public class PlayerController : MonoBehaviour
                     // Play particles
                     juiceHandler.ToggleRunning(false);
 
+                    // Stop sound
+                    AudioManager.instance.Stop("Run");
+
                     // Change animation
                     animationHandler.ChangeAnimation("Crouch Walk");
 
@@ -214,13 +239,20 @@ public class PlayerController : MonoBehaviour
                     playerState = PlayerState.Crouchwalk;
                 }
 
-                if (!movementHandler.IsGrounded())
+                // Check for jump
+                if (movementHandler.IsRising())
                 {
                     // Play particles
                     juiceHandler.ToggleRunning(false);
 
+                    // Stop sound
+                    AudioManager.instance.Stop("Run");
+
                     // Play particles
                     juiceHandler.PlayJump();
+
+                    // Play sound
+                    AudioManager.instance.Play("Jump");
 
                     // Change animation
                     animationHandler.ChangeAnimation("Rise");
@@ -234,6 +266,9 @@ public class PlayerController : MonoBehaviour
                 {
                     // Play particles
                     juiceHandler.ToggleRunning(false);
+
+                    // Stop sound
+                    AudioManager.instance.Stop("Run");
 
                     // Change animation
                     animationHandler.ChangeAnimation("Fall");
@@ -286,6 +321,9 @@ public class PlayerController : MonoBehaviour
                     // Play particles
                     juiceHandler.PlayLand();
 
+                    // Play sound
+                    AudioManager.instance.Play("Land");
+
                     // Change animation
                     animationHandler.ChangeAnimation("Idle");
 
@@ -296,6 +334,9 @@ public class PlayerController : MonoBehaviour
                 // Check for coyote jumps
                 if (movementHandler.IsRising())
                 {
+                    // Play sound
+                    AudioManager.instance.Play("Jump");
+
                     // Change animation
                     animationHandler.ChangeAnimation("Rise");
 
@@ -306,6 +347,9 @@ public class PlayerController : MonoBehaviour
                 // Check for ledge
                 if (movementHandler.IsTouchingLedge())
                 {
+                    // Play sound
+                    AudioManager.instance.Play("Grab Ledge");
+
                     // Change animation
                     animationHandler.ChangeAnimation("Hang");
 
@@ -383,6 +427,9 @@ public class PlayerController : MonoBehaviour
                     // Play particles
                     juiceHandler.ToggleRunning(true);
 
+                    // Play sound
+                    AudioManager.instance.Play("Run");
+
                     // Change animation
                     animationHandler.ChangeAnimation("Run");
 
@@ -415,6 +462,9 @@ public class PlayerController : MonoBehaviour
                 // Check for jump
                 if (movementHandler.IsRising())
                 {
+                    // Play sound
+                    AudioManager.instance.Play("Jump");
+
                     // Change animation
                     animationHandler.ChangeAnimation("Rise");
 
@@ -454,6 +504,9 @@ public class PlayerController : MonoBehaviour
                 // Check for jump
                 if (movementHandler.IsRising())
                 {
+                    // Play sound
+                    AudioManager.instance.Play("Jump");
+
                     // Change animation
                     animationHandler.ChangeAnimation("Rise");
 

@@ -31,6 +31,7 @@ public class MovementHandler : MonoBehaviour
     [SerializeField] private bool isWallSliding;
     [SerializeField] private bool isWallHanging;
     [SerializeField] private bool isMantling;
+    [SerializeField] private bool isDead;
 
     [Header("Settings")]
     [SerializeField] private LayerMask groundLayer;
@@ -57,6 +58,17 @@ public class MovementHandler : MonoBehaviour
     }
 
     #region Input
+
+    public void Die()
+    {
+        // Disable any other states
+        isMantling = false;
+        isWallHanging = false;
+        isWallSliding = false;
+
+        // Set flag
+        isDead = true;
+    }
 
     public void Stop()
     {
@@ -140,7 +152,7 @@ public class MovementHandler : MonoBehaviour
             var corner = hurtBox.bounds.center + new Vector3(onWallThisFrame * hurtBox.bounds.extents.x, hurtBox.bounds.extents.y, 0f);
 
             // Get offset
-            var offset = new Vector3(onWallThisFrame * hurtBox.bounds.extents.x, hurtBox.bounds.extents.y, 0f);
+            var offset = new Vector3(onWallThisFrame * hurtBox.bounds.extents.x, hurtBox.bounds.extents.y + checkThickness, 0f);
 
             // Relocate transform
             transform.position = corner + offset;
@@ -209,6 +221,16 @@ public class MovementHandler : MonoBehaviour
 
     private void HandleHorizontalMovement()
     {
+        // Check if player is dead
+        if (isDead)
+        {
+            // Decelerate to 0, slowly
+            currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, 0f, stats.deathDeceleration * Time.deltaTime);
+
+            // Finish
+            return;
+        }
+
         // Check if player is on wall
         if (isWallSliding || isWallHanging || isMantling)
         {

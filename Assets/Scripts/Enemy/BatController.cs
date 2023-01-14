@@ -22,7 +22,6 @@ public class BatController : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private LayerMask targetLayer;
     [SerializeField] private float aggroRange = 5f;
-    [SerializeField] private float indicatorDuration = 1f;
     [SerializeField] private float aggroRingRotateSpeed = 10f;
     [SerializeField] private LayerMask groundLayer;
 
@@ -66,6 +65,9 @@ public class BatController : MonoBehaviour
 
                     // Show indicator
                     indicatorAnimator.Play("Show");
+
+                    // Play sound
+                    AudioManager.instance.Play("Enemy Aggro");
 
                     // Change animation
                     animationHandler.ChangeAnimation("Aggro");

@@ -27,3 +27,4 @@ MonoBehaviour:
   risingGravity: 40
   fallingGravity: 60
   maxFallSpeed: 40
+  deathDeceleration: 4

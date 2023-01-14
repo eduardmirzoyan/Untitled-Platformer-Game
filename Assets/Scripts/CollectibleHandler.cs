@@ -33,6 +33,9 @@ public class CollectibleHandler : MonoBehaviour
         // Play animation
         animationHandler.ChangeAnimation("Pick up");
 
+        // Play sound
+        AudioManager.instance.Play("Collect");
+
         // Trigger event
         LevelEvents.instance.TriggerOnCollect(this);
 

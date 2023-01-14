@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class ExitDoorHandler : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private AnimationHandler animationHandler;
     [SerializeField] private Transform exitLocationTransform;
+    [SerializeField] private AudioSource audioSource;
 
     [Header("Data")]
     [SerializeField] private bool unlocked;
@@ -46,6 +48,9 @@ public class ExitDoorHandler : MonoBehaviour
 
                 // Play animation
                 animationHandler.ChangeAnimation("Unlock");
+
+                // Play sound
+                audioSource.Play();
 
                 // Change state
                 unlocked = true;

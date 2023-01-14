@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+[RequireComponent(typeof(FadeUI))]
 public class CollectiblesDisplay : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private FadeUI fadeUI;
 
     [Header("Data")]
     [SerializeField] private int totalCollectibles;
@@ -16,9 +18,18 @@ public class CollectiblesDisplay : MonoBehaviour
     [SerializeField] private Color defaultColor;
     [SerializeField] private Color completedColor;
 
+    private void Awake()
+    {
+        fadeUI = GetComponent<FadeUI>();
+    }
+
     private void Start()
     {
         // Sub
+        LevelEvents.instance.onLockEntrance += Show;
+        LevelEvents.instance.onPlayerDeath += Hide;
+        LevelEvents.instance.onLevelExit += Hide;
+
         LevelEvents.instance.onLevelSetup += SetupDisplay;
         LevelEvents.instance.onCollect += UpdateText;
     }
@@ -26,6 +37,10 @@ public class CollectiblesDisplay : MonoBehaviour
     private void OnDestroy()
     {
         // Unsub
+        LevelEvents.instance.onLockEntrance -= Show;
+        LevelEvents.instance.onPlayerDeath -= Hide;
+        LevelEvents.instance.onLevelExit -= Hide;
+
         LevelEvents.instance.onLevelSetup -= SetupDisplay;
         LevelEvents.instance.onCollect -= UpdateText;
     }
@@ -48,5 +63,22 @@ public class CollectiblesDisplay : MonoBehaviour
         // Update text
         text.text = currentCollected + "/" + totalCollectibles;
         text.color = currentCollected >= totalCollectibles ? completedColor : defaultColor;
+    }
+
+    private void Show()
+    {
+        // Show UI
+        fadeUI.FadeIn();
+    }
+
+    private void Hide()
+    {
+        // Hide UI
+        fadeUI.FadeOut();
+    }
+
+    private void Hide(Transform transform)
+    {
+        Hide();
     }
 }

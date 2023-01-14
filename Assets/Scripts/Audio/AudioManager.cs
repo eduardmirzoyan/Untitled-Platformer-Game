@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-    
     [SerializeField] private List<Sound> sounds;
     [SerializeField] private float fadeTime = 1f;
+    [SerializeField] private RunAudio runAudio;
     private Coroutine coroutine;
 
     private string song;
@@ -92,7 +91,7 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void Play(string name)
+    public void PlayMusic(string name)
     {
         // Don't replay same song
         if (song == name) return;
@@ -108,15 +107,65 @@ public class AudioManager : MonoBehaviour
         else { print("Sound with that name not found: " + name); }
     }
 
-    public void Stop(string name)
+    public void StopMusic(string name)
     {
         Sound sound = sounds.Find(sound => sound.name == name);
         if (sound != null)
         {
+            // Remove song
+            song = "";
+
             if (coroutine != null) StopCoroutine(coroutine);
 
             coroutine = StartCoroutine(FadeOutAudio(sound));
         }
         else { print("Sound with that name not found: " + name); }
     }
+
+    public void Play(string name)
+    {
+        // Special case
+        if (name == "Run") 
+        {
+            runAudio.Play();
+            return;
+        }
+
+        // Find sound
+        Sound sound = sounds.Find(sound => sound.name == name);
+
+        // Make sure sound exists
+        if (sound != null)
+        {
+            // Set volume
+            sound.audioSource.volume = sound.volume;
+
+            // Play sound
+            sound.audioSource.Play();
+        }
+        else { print("Sound with that name not found: " + name); }
+    }
+
+    public void Stop(string name)
+    {
+        // Special case
+        if (name == "Run")
+        {
+            runAudio.Stop();
+            return;
+        }
+
+        // Find sound
+        Sound sound = sounds.Find(sound => sound.name == name);
+
+        // Make sure sound exists
+        if (sound != null)
+        {
+            // Stop sound
+            sound.audioSource.Stop();
+        }
+        else { print("Sound with that name not found: " + name); }
+    }
+
+    
 }

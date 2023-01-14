@@ -35,6 +35,25 @@ public class EntranceDoorHandler : MonoBehaviour
 
     private void Close()
     {
+        // Play animation
         animationHandler.ChangeAnimation("Close");
+
+        // Start routine
+        StartCoroutine(PlaySoundWithDelay(1f));
+    }
+
+    private IEnumerator PlaySoundWithDelay(float duration)
+    {
+        // Play sound
+        AudioManager.instance.Play("Close");
+
+        // Wait
+        yield return new WaitForSeconds(duration);
+
+        // Stop old sound
+        AudioManager.instance.Stop("Close");
+
+        // Play sound
+        AudioManager.instance.Play("Shut");
     }
 }
