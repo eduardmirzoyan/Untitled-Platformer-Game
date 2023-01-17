@@ -30,6 +30,7 @@ public class AudioManager : MonoBehaviour
             sound.audioSource.volume = sound.volume;
             sound.audioSource.pitch = sound.pitch;
             sound.audioSource.loop = sound.loop;
+            sound.audioSource.ignoreListenerPause = sound.ignorePause;
 
             sound.audioSource.outputAudioMixerGroup = sound.audioMixerGroup;
         }
@@ -166,6 +167,4 @@ public class AudioManager : MonoBehaviour
         }
         else { print("Sound with that name not found: " + name); }
     }
-
-    
 }

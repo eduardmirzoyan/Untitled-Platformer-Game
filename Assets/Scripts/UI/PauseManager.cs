@@ -42,6 +42,9 @@ public class PauseManager : MonoBehaviour
         // Stop time
         Time.timeScale = 0f;
 
+        // Pause sounds
+        AudioListener.pause = true;
+
         // Make menu visible
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
@@ -54,6 +57,9 @@ public class PauseManager : MonoBehaviour
 
         // Start time
         Time.timeScale = 1f;
+
+        // Resume audio
+        AudioListener.pause = false;
 
         // Make menu invisible
         canvasGroup.alpha = 0;
@@ -77,6 +83,12 @@ public class PauseManager : MonoBehaviour
 
         // Tell game to return to main menu
         TransitionManager.instance.LoadMainMenuScene(Vector3.zero);
+    }
+
+    public void OpenSettings()
+    {
+        // Open settings
+        SettingsManager.instance.Open();
     }
 
     public void Quit()

@@ -36,11 +36,11 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\NavMeshComponents\Assets\Tests\NavMeshSurfaceAgentTests.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Tests\NavMeshSurfaceModifierVolumeTests.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Tests\NavMeshSurfaceTests.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Tests\NavMeshSurfaceLinkTests.cs" />
      <Compile Include="Assets\NavMeshComponents\Assets\Tests\NavMeshSurfaceModifierTests.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Tests\NavMeshSurfaceLinkTests.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Tests\NavMeshSurfaceTests.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Tests\NavMeshSurfaceModifierVolumeTests.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Tests\NavMeshSurfaceAgentTests.cs" />
      <None Include="Assets\NavMeshComponents\Assets\Tests\NavMeshComponentsTestsPlaymode.asmdef" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.1f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

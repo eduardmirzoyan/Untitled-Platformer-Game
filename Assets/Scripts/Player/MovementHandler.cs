@@ -26,6 +26,7 @@ public class MovementHandler : MonoBehaviour
     [SerializeField] private bool isFacingRight;
     [SerializeField] private int moveRequest;
     [SerializeField] private bool isJumping;
+    [SerializeField] private bool isWallJumping;
     [SerializeField] private bool endJumpRequest;
     [SerializeField] private bool crouchRequest;
     [SerializeField] private bool isWallSliding;
@@ -103,8 +104,8 @@ public class MovementHandler : MonoBehaviour
 
     public void EndJumpEarly()
     {
-        // If you are mid jump
-        if (isJumping)
+        // If you are mid jump (not wall jump)
+        if (isJumping && !isWallJumping)
         {
             // Set flag
             endJumpRequest = true;
@@ -312,6 +313,7 @@ public class MovementHandler : MonoBehaviour
 
                 // Set flag
                 isJumping = true;
+                isWallJumping = true;
             }
         }
 
@@ -343,6 +345,10 @@ public class MovementHandler : MonoBehaviour
         {
             // Remove y vel
             currentVelocity.y = 0f;
+
+            // Stop
+            isJumping = false;
+            isWallJumping = false;  
 
             // Finish
             return;

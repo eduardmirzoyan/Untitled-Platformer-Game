@@ -36,11 +36,11 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\NavMeshComponents\Assets\Tests\Editor\PrefabStageAutoSavingUtil.cs" />
      <Compile Include="Assets\NavMeshComponents\Assets\Tests\Editor\NavMeshSurfaceInPrefabTests.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Tests\Editor\NavMeshSurfaceInPrefabVariantTests.cs" />
      <Compile Include="Assets\NavMeshComponents\Assets\Tests\Editor\PrefabSavingUtil.cs" />
      <Compile Include="Assets\NavMeshComponents\Assets\Tests\Editor\NavMeshModifierVolumeInPrefabTests.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Tests\Editor\PrefabStageAutoSavingUtil.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Tests\Editor\NavMeshSurfaceInPrefabVariantTests.cs" />
      <None Include="Assets\NavMeshComponents\Assets\Tests\Editor\NavMeshComponentsTestsEditmode.asmdef" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.1f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

@@ -36,19 +36,19 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\RandomInstancing.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\FreeCam.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\DungeonManager.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\EnableIffSleeping.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\NavMeshSourceTag.cs" />
      <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\ClickToMove.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\RandomWalk.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\SpawnPrefabOnKeyDown.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\AgentLinkMover.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\MeshTool.cs" />
      <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\Oscillator.cs" />
-     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\NavMeshPrefabInstance.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\NavMeshSourceTag.cs" />
      <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\LocalNavMeshBuilder.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\EnableIffSleeping.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\RandomInstancing.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\DungeonManager.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\FreeCam.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\AgentLinkMover.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\RandomWalk.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\NavMeshPrefabInstance.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\MeshTool.cs" />
+     <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\SpawnPrefabOnKeyDown.cs" />
      <Compile Include="Assets\NavMeshComponents\Assets\Examples\Scripts\DestroyOnTrigger.cs" />
      <None Include="Assets\NavMeshComponents\Assets\Examples\NavMeshComponentsExamples.asmdef" />
     <Reference Include="UnityEngine">

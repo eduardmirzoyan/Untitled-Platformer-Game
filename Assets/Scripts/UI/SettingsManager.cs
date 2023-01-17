@@ -3,17 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using TMPro;
+using UnityEngine.UI;
 
 public class SettingsManager : MonoBehaviour
 {
-    public static SettingsManager instance;
+    [Header("Components")]
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private TMP_Dropdown resolutionsDropdown;
+    [SerializeField] private Toggle fullscreenToggle;
+    [SerializeField] private Slider masterVolumeSlider;
+    [SerializeField] private Slider musicVolumeSlider;
+    [SerializeField] private Slider sfxVolumeSlider;
+    [SerializeField] private Slider uiVolumeSlider;
+
+    [Header("Settings")]
+    [SerializeField] private KeyCode closeHotkey = KeyCode.Escape;
+
+    [Header("Debugging")]
+    [SerializeField] private bool debugMode;
 
     private Resolution[] resolutions;
     private bool isOpen;
 
+    public static SettingsManager instance;
     private void Awake()
     {
         // Singleton logic
@@ -64,11 +77,11 @@ public class SettingsManager : MonoBehaviour
 
     private void Start()
     {
+        // Clear any previous options in dropdown
+        resolutionsDropdown.ClearOptions();
+
         // Cache possible resolutions based on hardware
         resolutions = Screen.resolutions;
-
-        // Clear any options
-        resolutionsDropdown.ClearOptions();
 
         // Format resolutions
         List<string> options = new List<string>();
@@ -92,15 +105,16 @@ public class SettingsManager : MonoBehaviour
         // Update the options
         resolutionsDropdown.RefreshShownValue();
 
-        // Load any previous settings
+        // Load any presistent settings
         LoadSettings();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && isOpen)
+        // If hotkey is pressed while settings is open
+        if (Input.GetKeyDown(closeHotkey) && isOpen)
         {
-            // Close settings
+            // Close settings UI
             Close();
         }
     }
@@ -130,11 +144,14 @@ public class SettingsManager : MonoBehaviour
         // Set mixer volume 
         audioMixer.SetFloat("MasterVolume", volume);
 
+        // Set slider
+        masterVolumeSlider.value = volume;
+
         // Save pref
         PlayerPrefs.SetFloat("MasterVolume", volume);
 
         // Debug
-        Debug.Log("Master volume set to: " + volume);
+        if (debugMode) Debug.Log("Master volume set to: " + volume);
     }
 
     public void SetMusicVolume(float volume)
@@ -142,11 +159,14 @@ public class SettingsManager : MonoBehaviour
         // Set mixer volume 
         audioMixer.SetFloat("MusicVolume", volume);
 
+        // Set slider
+        musicVolumeSlider.value = volume;
+
         // Save pref
         PlayerPrefs.SetFloat("MusicVolume", volume);
 
         // Debug
-        Debug.Log("Music volume set to: " + volume);
+        if (debugMode) Debug.Log("Music volume set to: " + volume);
     }
 
     public void SetSFXVolume(float volume)
@@ -154,11 +174,14 @@ public class SettingsManager : MonoBehaviour
         // Set mixer volume 
         audioMixer.SetFloat("SFXVolume", volume);
 
+        // Set slider
+        sfxVolumeSlider.value = volume;
+
         // Save pref
         PlayerPrefs.SetFloat("SFXVolume", volume);
 
         // Debug
-        Debug.Log("SFX volume set to: " + volume);
+        if (debugMode) Debug.Log("SFX volume set to: " + volume);
     }
 
     public void SetUIVolume(float volume)
@@ -166,11 +189,14 @@ public class SettingsManager : MonoBehaviour
         // Set mixer volume 
         audioMixer.SetFloat("UIVolume", volume);
 
+        // Set slider
+        uiVolumeSlider.value = volume;
+
         // Save pref
         PlayerPrefs.SetFloat("UIVolume", volume);
 
         // Debug
-        Debug.Log("UI volume set to: " + volume);
+        if (debugMode) Debug.Log("UI volume set to: " + volume);
     }
 
     public void SetQuality(int qualityIndex)
@@ -180,7 +206,7 @@ public class SettingsManager : MonoBehaviour
         QualitySettings.SetQualityLevel(qualityIndex);
 
         // Debug
-        Debug.Log("Quality set to: " + qualityIndex);
+        if (debugMode) Debug.Log("Quality set to: " + qualityIndex);
     }
 
     public void SetResolution(int resolutionIndex)
@@ -191,11 +217,14 @@ public class SettingsManager : MonoBehaviour
         // Update resolution
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
 
+        // Set dropdown value
+        resolutionsDropdown.value = resolutionIndex;
+
         // Save pref
         PlayerPrefs.SetInt("Resolution", resolutionIndex);
 
         // Debug
-        Debug.Log("Resolution set to: " + resolution.width + " x " + resolution.height);
+        if (debugMode) Debug.Log("Resolution set to: " + resolution.width + " x " + resolution.height);
     }
 
     public void SetFullscreen(bool isFullscreen)
@@ -203,11 +232,14 @@ public class SettingsManager : MonoBehaviour
         // Set fullscreen
         Screen.fullScreen = isFullscreen;
 
+        // Set state
+        fullscreenToggle.isOn = isFullscreen;
+
         // Save pref
         int state = isFullscreen ? 1 : 0;
         PlayerPrefs.SetInt("Fullscreen", state);
 
         // Debug
-        Debug.Log("Fullscreen set to: " + isFullscreen.ToString());
+        if (debugMode) Debug.Log("Fullscreen set to: " + isFullscreen.ToString());
     }
 }

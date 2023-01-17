@@ -15,7 +15,7 @@ TagManager:
   - Wall
   - Collectibles
   - Interactables
-  - 
+  - Decoration
   - 
   - Player
   - Enemy
@@ -47,6 +47,9 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 681619883
+    locked: 0
+  - name: Decoration
+    uniqueID: 4089159099
     locked: 0
   - name: Exit
     uniqueID: 597204779

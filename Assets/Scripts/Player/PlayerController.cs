@@ -143,9 +143,6 @@ public class PlayerController : MonoBehaviour
                 // Check for jumping
                 if (!movementHandler.IsGrounded())
                 {
-                    // Play particles
-                    juiceHandler.PlayJump();
-
                     // Play sound
                     AudioManager.instance.Play("Jump");
 
@@ -247,9 +244,6 @@ public class PlayerController : MonoBehaviour
 
                     // Stop sound
                     AudioManager.instance.Stop("Run");
-
-                    // Play particles
-                    juiceHandler.PlayJump();
 
                     // Play sound
                     AudioManager.instance.Play("Jump");
@@ -360,6 +354,9 @@ public class PlayerController : MonoBehaviour
                 // Handle wall sliding
                 if (movementHandler.IsWallSliding())
                 {
+                    // Play particles
+                    juiceHandler.ToggleSlide(true);
+
                     // Change animation
                     animationHandler.ChangeAnimation("Wallslide");
 
@@ -462,6 +459,9 @@ public class PlayerController : MonoBehaviour
                 // Check for jump
                 if (movementHandler.IsRising())
                 {
+                    // Stop particles
+                    juiceHandler.ToggleSlide(false);
+
                     // Play sound
                     AudioManager.instance.Play("Jump");
 
@@ -475,6 +475,9 @@ public class PlayerController : MonoBehaviour
                 // Check for fall
                 if (!movementHandler.IsWallSliding())
                 {
+                    // Stop particles
+                    juiceHandler.ToggleSlide(false);
+
                     // Change animation
                     animationHandler.ChangeAnimation("Fall");
 
@@ -485,6 +488,9 @@ public class PlayerController : MonoBehaviour
                 // Check for idle
                 if (movementHandler.IsGrounded())
                 {
+                    // Stop particles
+                    juiceHandler.ToggleSlide(false);
+
                     // Change animation
                     animationHandler.ChangeAnimation("Idle");
 
@@ -526,6 +532,9 @@ public class PlayerController : MonoBehaviour
 
                 break;
             case PlayerState.Mantle:
+
+                // Handle running
+                HandleRunning();
 
                 // Wait til animation is over
                 if (animationHandler.IsFinished())

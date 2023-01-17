@@ -8,6 +8,7 @@ public class JuiceHandler : MonoBehaviour
     [SerializeField] private ParticleSystem runningParticles;
     [SerializeField] private ParticleSystem jumpingParticles;
     [SerializeField] private ParticleSystem landingParticles;
+    [SerializeField] private ParticleSystem slidingParticles;
 
     public void ToggleRunning(bool state)
     {
@@ -23,5 +24,11 @@ public class JuiceHandler : MonoBehaviour
     public void PlayLand()
     {
         landingParticles.Play();
+    }
+
+    public void ToggleSlide(bool state)
+    {
+        if (state) slidingParticles.Play();
+        else slidingParticles.Stop();
     }
 }
