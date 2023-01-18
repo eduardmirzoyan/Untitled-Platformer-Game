@@ -66,11 +66,13 @@
      <Compile Include="Assets\Scripts\LevelEvents.cs" />
      <Compile Include="Assets\Scripts\EntranceDoorHandler.cs" />
      <Compile Include="Assets\Scripts\UI\PauseManager.cs" />
+     <Compile Include="Assets\Scripts\SignHandler.cs" />
      <Compile Include="Assets\Scripts\ExitDoorHandler.cs" />
      <Compile Include="Assets\Scripts\Player\AnimationHandler.cs" />
      <Compile Include="Assets\Scripts\Enemy\BatController.cs" />
      <Compile Include="Assets\Scripts\Player\InputHandler.cs" />
-     <Compile Include="Assets\Scripts\SignHandler.cs" />
+     <Compile Include="Assets\Scripts\Player\PlatformHandler.cs" />
+     <Compile Include="Assets\Scripts\Player\SpikesHandler.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

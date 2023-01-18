@@ -23,6 +23,7 @@ public class DamageHandler : MonoBehaviour
 
     private void Awake()
     {
+        // Get ref
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         // Save original material

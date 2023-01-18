@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private enum PlayerState { Idle, Run, Rise, Fall, Crouch, Crouchwalk, Wallslide, Wallhang, Mantle, Exiting, Entering, Dead, Invisible };
+    private enum PlayerState { Idle, Run, Rise, Fall, Crouch, Crouchwalk, Wallslide, Wallhang, Mantle, Exiting, Entering, Dead, Invisible, Roll };
 
     [Header("Components")]
     [SerializeField] private InputHandler inputHandler;
@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InteractionHandler interactionHandler;
     [SerializeField] private DamageHandler damageHandler;
     [SerializeField] private JuiceHandler juiceHandler;
+    [SerializeField] private PlatformHandler platformHandler;
 
     [Header("Data")]
     [SerializeField] private PlayerState playerState;
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
         interactionHandler = GetComponent<InteractionHandler>();
         damageHandler = GetComponent<DamageHandler>();
         juiceHandler = GetComponent<JuiceHandler>();
+        platformHandler = GetComponent<PlatformHandler>();
 
         // Starting state should be invisible
         playerState = PlayerState.Invisible;
@@ -309,6 +311,9 @@ public class PlayerController : MonoBehaviour
                 // Handle jumping
                 HandleJumping();
 
+                // TEMP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                HandleDropping();
+
                 // Check for landing
                 if (movementHandler.IsGrounded())
                 {
@@ -550,6 +555,24 @@ public class PlayerController : MonoBehaviour
                 }
 
                 break;
+            case PlayerState.Roll:
+
+                // TODO
+
+                // Wait til animation is over
+                if (animationHandler.IsFinished())
+                {
+                    // Move model
+                    movementHandler.PerformMantle();
+
+                    // Change animation
+                    animationHandler.ChangeAnimation("Idle");
+
+                    // Change states
+                    playerState = PlayerState.Idle;
+                }
+
+                break;
             case PlayerState.Exiting:
 
                 // When animation is over
@@ -616,5 +639,10 @@ public class PlayerController : MonoBehaviour
     private void HandleInteracting()
     {
         if (inputHandler.GetInteractKeyDown()) interactionHandler.InteractWithSurroundings();
+    }
+
+    private void HandleDropping()
+    {
+        if (inputHandler.GetCrouchKey() && inputHandler.GetJumpInputDown()) platformHandler.Drop();
     }
 }

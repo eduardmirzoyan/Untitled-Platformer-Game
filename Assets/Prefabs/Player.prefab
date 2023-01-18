@@ -14806,7 +14806,9 @@ GameObject:
   - component: {fileID: 7243715021196335644}
   - component: {fileID: 7243715021196335645}
   - component: {fileID: 7243715021196335646}
+  - component: {fileID: 8426105839169826687}
   - component: {fileID: 7243715021196335647}
+  - component: {fileID: 5196540767336486120}
   m_Layer: 11
   m_Name: Player
   m_TagString: Player
@@ -14974,6 +14976,27 @@ MonoBehaviour:
   jumpingParticles: {fileID: 7243715020522187522}
   landingParticles: {fileID: 7243715020995233345}
   slidingParticles: {fileID: 313030573801799420}
+--- !u!114 &8426105839169826687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7243715021196335641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c19435958f981884ea252851f4b8923e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  platformerCollider: {fileID: 0}
+  isDropping: 0
+  targetHeight: 0
+  platformCollider: {fileID: 0}
+  platformLayer:
+    serializedVersion: 2
+    m_Bits: 16384
+  platformThickness: 0.3
+  debugMode: 1
 --- !u!114 &7243715021196335647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14992,7 +15015,27 @@ MonoBehaviour:
   interactionHandler: {fileID: 0}
   damageHandler: {fileID: 0}
   juiceHandler: {fileID: 0}
+  platformHandler: {fileID: 0}
   playerState: 0
+--- !u!114 &5196540767336486120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7243715021196335641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51db373988b11f1488174e68a7d3b6fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collider2d: {fileID: 0}
+  movementHandler: {fileID: 0}
+  damageHandler: {fileID: 0}
+  checkThickness: 0.1
+  spikesLayer:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!1 &7243715021717866727
 GameObject:
   m_ObjectHideFlags: 0
