@@ -41,6 +41,7 @@
      <Compile Include="Assets\Scripts\UI\MinimapCamera.cs" />
      <Compile Include="Assets\Scripts\UI\TimerDisplay.cs" />
      <Compile Include="Assets\Scripts\Audio\Sound.cs" />
+     <Compile Include="Assets\Scripts\Player\SpikesHandler.cs" />
      <Compile Include="Assets\Scripts\Player\InteractionHandler.cs" />
      <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
      <Compile Include="Assets\Scripts\UI\TransitionManager.cs" />
@@ -52,6 +53,7 @@
      <Compile Include="Assets\Scripts\UI\PointerManager.cs" />
      <Compile Include="Assets\Scripts\Player\MovementHandler.cs" />
      <Compile Include="Assets\Scripts\UI\CutoutMaskUI.cs" />
+     <Compile Include="Assets\Scripts\Player\PlatformHandler.cs" />
      <Compile Include="Assets\Scripts\Player\DamageHandler.cs" />
      <Compile Include="Assets\Scripts\UI\FadeUI.cs" />
      <Compile Include="Assets\Scripts\Controls.cs" />
@@ -71,8 +73,6 @@
      <Compile Include="Assets\Scripts\Player\AnimationHandler.cs" />
      <Compile Include="Assets\Scripts\Enemy\BatController.cs" />
      <Compile Include="Assets\Scripts\Player\InputHandler.cs" />
-     <Compile Include="Assets\Scripts\Player\PlatformHandler.cs" />
-     <Compile Include="Assets\Scripts\Player\SpikesHandler.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

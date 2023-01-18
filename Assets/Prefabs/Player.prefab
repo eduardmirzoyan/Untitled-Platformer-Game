@@ -14957,7 +14957,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 0}
   isHurt: 0
   isInvincible: 0
-  flashMaterial: {fileID: 2100000, guid: b91ed34d08d854b42a6da79c06692b93, type: 2}
+  flashMaterial: {fileID: 2100000, guid: f35b472573087854989308b42c5e6013, type: 2}
   hitDuration: 0.1
   debugMode: 1
 --- !u!114 &7243715021196335646

@@ -30,7 +30,7 @@ public class PlatformHandler : MonoBehaviour
         if (isDropping)
         {
             // Get height of the top of the platformer collider
-            float currentHeight = platformerCollider.bounds.center.y; //+ platformerCollider.bounds.extents.y;
+            float currentHeight = platformerCollider.bounds.center.y + platformerCollider.bounds.extents.y;
 
             // Check to see if you have passed the target
             if (currentHeight <= targetHeight)
