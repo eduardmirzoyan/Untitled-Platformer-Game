@@ -6,8 +6,9 @@ public class MovementHandler : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private Rigidbody2D body;
-    [SerializeField] private Collider2D hurtBox;
+    [SerializeField] private Collider2D collider2d;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private PlatformHandler platformHandler;
 
     [Header("Time Data")]
     [SerializeField] private float timeSinceGrounded;
@@ -35,7 +36,8 @@ public class MovementHandler : MonoBehaviour
     [SerializeField] private bool isDead;
 
     [Header("Settings")]
-    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private LayerMask platformLayer;
     [SerializeField] private float checkThickness = 0.02f;
 
     [Header("Debugging")]
@@ -50,8 +52,9 @@ public class MovementHandler : MonoBehaviour
     {
         // Get refs
         body = GetComponentInChildren<Rigidbody2D>();
-        hurtBox = GetComponentInChildren<Collider2D>();
+        collider2d = GetComponentInChildren<Collider2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        platformHandler = GetComponent<PlatformHandler>();
 
         // Set default states
         isFacingRight = true;
@@ -114,12 +117,18 @@ public class MovementHandler : MonoBehaviour
 
             // Disable flag
             isJumping = false;
-        }
-        
+        }   
+    }
+
+    public void Drop()
+    {
+        // Drop
+        platformHandler.Drop();
     }
 
     public void Roll()
     {
+        // Set time
         rollTime = stats.rollDuration;
     }
 
@@ -158,10 +167,10 @@ public class MovementHandler : MonoBehaviour
         if (isMantling)
         {
             // Get corner of ledge check based on which wall u are on
-            var corner = hurtBox.bounds.center + new Vector3(onWallThisFrame * hurtBox.bounds.extents.x, hurtBox.bounds.extents.y, 0f);
+            var corner = collider2d.bounds.center + new Vector3(onWallThisFrame * collider2d.bounds.extents.x, collider2d.bounds.extents.y, 0f);
 
             // Get offset
-            var offset = new Vector3(onWallThisFrame * hurtBox.bounds.extents.x, hurtBox.bounds.extents.y + checkThickness, 0f);
+            var offset = new Vector3(onWallThisFrame * collider2d.bounds.extents.x, collider2d.bounds.extents.y + checkThickness, 0f);
 
             // Relocate transform
             transform.position = corner + offset;
@@ -243,10 +252,10 @@ public class MovementHandler : MonoBehaviour
         // Check for rolling
         if (rollTime > 0f)
         {
-            // Accelerate to max
-            currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, stats.maxRollSpeed, stats.rollAcceleration * Time.deltaTime);
+            // Set speed constant
+            currentVelocity.x = moveRequest * stats.maxRollSpeed;
 
-            // Decrement roll ime
+            // Decrement roll time
             rollTime -= Time.deltaTime;
 
             // Finish
@@ -415,23 +424,25 @@ public class MovementHandler : MonoBehaviour
 
     private bool CalcTouchGround()
     {
-        var position = hurtBox.bounds.center - new Vector3(0f, hurtBox.bounds.extents.y, 0f);
-        var size = new Vector2(0.9f * hurtBox.bounds.size.x, checkThickness);
+        var position = collider2d.bounds.center - new Vector3(0f, collider2d.bounds.extents.y, 0f);
+        var size = new Vector2(0.9f * collider2d.bounds.size.x, checkThickness);
 
-        return Physics2D.OverlapBox(position, size, 0, groundLayer) && body.velocity.y < 0.1f;
+        LayerMask layer = platformHandler.IsDropping() ? wallLayer : wallLayer | platformLayer;
+
+        return Physics2D.OverlapBox(position, size, 0, layer) && body.velocity.y < 0.1f;
     }
 
     private int CalcTouchWall()
     {
-        var size = new Vector2(checkThickness, hurtBox.bounds.extents.y);
+        var size = new Vector2(checkThickness, collider2d.bounds.extents.y);
 
         // Left side
-        var position = hurtBox.bounds.center + new Vector3(-hurtBox.bounds.extents.x, -hurtBox.bounds.extents.y / 4, 0f);
-        var hitLeft = Physics2D.OverlapBox(position, size, 0, groundLayer);
+        var position = collider2d.bounds.center + new Vector3(-collider2d.bounds.extents.x, -collider2d.bounds.extents.y / 4, 0f);
+        var hitLeft = Physics2D.OverlapBox(position, size, 0, wallLayer);
 
         // Right side
-        position = hurtBox.bounds.center + new Vector3(hurtBox.bounds.extents.x, -hurtBox.bounds.extents.y / 4, 0f);
-        var hitRight = Physics2D.OverlapBox(position, size, 0, groundLayer);
+        position = collider2d.bounds.center + new Vector3(collider2d.bounds.extents.x, -collider2d.bounds.extents.y / 4, 0f);
+        var hitRight = Physics2D.OverlapBox(position, size, 0, wallLayer);
 
         if (hitLeft)
         {
@@ -451,16 +462,16 @@ public class MovementHandler : MonoBehaviour
     private bool CalcTouchLedge()
     {
         // Look for ledge
-        var position = hurtBox.bounds.center + new Vector3(0f, hurtBox.bounds.extents.y, 0f);
-        var size = new Vector2(hurtBox.bounds.size.x + checkThickness, checkThickness);
-        return Physics2D.OverlapBox(position, size, 0, groundLayer);
+        var position = collider2d.bounds.center + new Vector3(0f, collider2d.bounds.extents.y, 0f);
+        var size = new Vector2(collider2d.bounds.size.x + checkThickness, checkThickness);
+        return Physics2D.OverlapBox(position, size, 0, wallLayer);
     }
 
     private bool TouchHead()
     {
-        var position = hurtBox.bounds.center + new Vector3(0f, hurtBox.bounds.extents.y, 0f);
-        var size = new Vector2(0.9f * hurtBox.bounds.size.x, checkThickness);
-        return Physics2D.OverlapBox(position, size, 0, groundLayer);
+        var position = collider2d.bounds.center + new Vector3(0f, collider2d.bounds.extents.y, 0f);
+        var size = new Vector2(0.9f * collider2d.bounds.size.x, checkThickness);
+        return Physics2D.OverlapBox(position, size, 0, wallLayer);
     }
 
     private void FlipModel(float direction)
@@ -518,32 +529,32 @@ public class MovementHandler : MonoBehaviour
     {
         // Ground check
         Gizmos.color = Color.red;
-        var position = hurtBox.bounds.center - new Vector3(0f, hurtBox.bounds.extents.y, 0f);
-        var size = new Vector2(0.9f * hurtBox.bounds.size.x, checkThickness);
+        var position = collider2d.bounds.center - new Vector3(0f, collider2d.bounds.extents.y, 0f);
+        var size = new Vector2(0.9f * collider2d.bounds.size.x, checkThickness);
         Gizmos.DrawWireCube(position, size);
 
         // Wall check
         Gizmos.color = Color.blue;
+        size = new Vector2(checkThickness, collider2d.bounds.extents.y);
+        
         // Left side
-        position = hurtBox.bounds.center + new Vector3(-hurtBox.bounds.extents.x, -hurtBox.bounds.extents.y / 4, 0f);
-        size = new Vector2(checkThickness, hurtBox.bounds.extents.y);
+        position = collider2d.bounds.center + new Vector3(-collider2d.bounds.extents.x, -collider2d.bounds.extents.y / 4, 0f);
         Gizmos.DrawWireCube(position, size);
         
         // Right side
-        position = hurtBox.bounds.center + new Vector3(hurtBox.bounds.extents.x, -hurtBox.bounds.extents.y / 4, 0f);
-        size = new Vector2(checkThickness, hurtBox.bounds.extents.y);
+        position = collider2d.bounds.center + new Vector3(collider2d.bounds.extents.x, -collider2d.bounds.extents.y / 4, 0f);
         Gizmos.DrawWireCube(position, size);
 
         // Ledge check
         Gizmos.color = Color.yellow;
-        position = hurtBox.bounds.center + new Vector3(0f, hurtBox.bounds.extents.y, 0f);
-        size = new Vector2(hurtBox.bounds.size.x + checkThickness, checkThickness);
+        position = collider2d.bounds.center + new Vector3(0f, collider2d.bounds.extents.y, 0f);
+        size = new Vector2(collider2d.bounds.size.x + checkThickness, checkThickness);
         Gizmos.DrawWireCube(position, size);
 
         // Head check
         Gizmos.color = Color.magenta;
-        position = hurtBox.bounds.center + new Vector3(0f, hurtBox.bounds.extents.y, 0f);
-        size = new Vector2(0.9f * hurtBox.bounds.size.x, checkThickness);
+        position = collider2d.bounds.center + new Vector3(0f, collider2d.bounds.extents.y, 0f);
+        size = new Vector2(0.9f * collider2d.bounds.size.x, checkThickness);
         Gizmos.DrawWireCube(position, size);
     }
 }

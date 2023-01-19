@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
+using UnityEngine.Rendering.Universal;
 
 public class ExitDoorHandler : MonoBehaviour
 {
@@ -9,6 +9,7 @@ public class ExitDoorHandler : MonoBehaviour
     [SerializeField] private AnimationHandler animationHandler;
     [SerializeField] private Transform exitLocationTransform;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private Light2D lightSource;
 
     [Header("Data")]
     [SerializeField] private bool unlocked;
@@ -19,6 +20,7 @@ public class ExitDoorHandler : MonoBehaviour
     private void Awake()
     {
         animationHandler = GetComponentInChildren<AnimationHandler>();
+        lightSource = GetComponentInChildren<Light2D>();
     }
 
     private void Start()
@@ -49,6 +51,9 @@ public class ExitDoorHandler : MonoBehaviour
                 // Play animation
                 animationHandler.ChangeAnimation("Unlock");
 
+                // Show light
+                lightSource.enabled = true;
+
                 // Play sound
                 audioSource.Play();
 
@@ -62,9 +67,6 @@ public class ExitDoorHandler : MonoBehaviour
     {
         // Relocate player
         playerTransform.position = exitLocationTransform.position;
-
-        // Exit scene
-        TransitionManager.instance.LoadNextScene(playerTransform.position);
     }
 
     public bool IsUnlocked()

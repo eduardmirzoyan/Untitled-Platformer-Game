@@ -31,8 +31,7 @@ public class MovementStats : ScriptableObject
     public float maxFallSpeed = 40;
 
     [Header("Rolling")]
-    public float rollDuration = 1f;
-    public float rollAcceleration = 60f;
+    public float rollDuration = 0.5f;
     public float maxRollSpeed = 6f;
     
     [Header("Extras")]

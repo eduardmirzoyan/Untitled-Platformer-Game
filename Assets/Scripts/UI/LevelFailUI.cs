@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class GameOverUI : MonoBehaviour
+public class LevelFailUI : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private CanvasGroup canvasGroup;
@@ -12,6 +12,13 @@ public class GameOverUI : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private float waitTime = 1f;
+
+    private void Awake()
+    {
+        canvasGroup = GetComponent<CanvasGroup>();
+        fadeUI = GetComponentInChildren<FadeUI>();
+        cinemachine = Camera.main.GetComponent<CinemachineVirtualCamera>();
+    }
 
     private void Start()
     {
@@ -29,7 +36,7 @@ public class GameOverUI : MonoBehaviour
         cinemachine.Follow = null;
 
         // Block interaction
-        canvasGroup.interactable = true;    
+        canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
 
         // Dim screen
@@ -58,4 +65,8 @@ public class GameOverUI : MonoBehaviour
         // Now show Window
         fadeUI.FadeIn();
     }
+
+    public void Restart() => PauseManager.instance.Restart();
+    public void MainMenu() => PauseManager.instance.MainMenu();
+    public void Quit() => PauseManager.instance.Quit();
 }

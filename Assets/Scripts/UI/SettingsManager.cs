@@ -242,4 +242,16 @@ public class SettingsManager : MonoBehaviour
         // Debug
         if (debugMode) Debug.Log("Fullscreen set to: " + isFullscreen.ToString());
     }
+
+    public void ClearData()
+    {
+        // Clear data
+        PlayerPrefs.DeleteKey("Best Time 1");
+        PlayerPrefs.DeleteKey("Best Time 2");
+        PlayerPrefs.DeleteKey("Best Time 3");
+        PlayerPrefs.DeleteKey("Best Time 4");
+
+        // Debug
+        if (debugMode) Debug.Log("Data cleared.");
+    }
 }

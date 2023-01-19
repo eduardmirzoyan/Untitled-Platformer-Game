@@ -28,15 +28,13 @@ public class TransitionManager : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
     }
 
-    private int GetSceneIndex()
+    public int GetSceneIndex()
     {
         return SceneManager.GetActiveScene().buildIndex;
     }
 
     public void OpenScene(Vector3 location)
     {
-        print("OPEN!~~~~~~~~~~~");
-
         // Save child location
         var temp = backgroundTransform.position;
 
@@ -83,6 +81,27 @@ public class TransitionManager : MonoBehaviour
 
         // Transition to next scene
         coroutine = StartCoroutine(LoadScene(SceneManager.GetActiveScene().buildIndex + 1, location));
+    }
+
+    public void LoadSelectedScene(int buildIndex, Vector3 location)
+    {
+        // Stop any background music
+        if (GetSceneIndex() == 0)
+        {
+            // Play title music
+            AudioManager.instance.StopMusic("Background " + 0);
+        }
+        else
+        {
+            // Play background music
+            AudioManager.instance.StopMusic("Background " + 1);
+        }
+
+        // Stop any transition if one was happening
+        if (coroutine != null) StopCoroutine(coroutine);
+
+        // Transition to next scene
+        coroutine = StartCoroutine(LoadScene(buildIndex, location));
     }
 
     public void ReloadScene(Vector3 location)

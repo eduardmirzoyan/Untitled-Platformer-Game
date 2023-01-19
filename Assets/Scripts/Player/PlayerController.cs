@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InteractionHandler interactionHandler;
     [SerializeField] private DamageHandler damageHandler;
     [SerializeField] private JuiceHandler juiceHandler;
-    [SerializeField] private PlatformHandler platformHandler;
 
     [Header("Data")]
     [SerializeField] private PlayerState playerState;
@@ -27,7 +26,6 @@ public class PlayerController : MonoBehaviour
         interactionHandler = GetComponent<InteractionHandler>();
         damageHandler = GetComponent<DamageHandler>();
         juiceHandler = GetComponent<JuiceHandler>();
-        platformHandler = GetComponent<PlatformHandler>();
 
         // Starting state should be invisible
         playerState = PlayerState.Invisible;
@@ -65,6 +63,9 @@ public class PlayerController : MonoBehaviour
             // Stop moving
             movementHandler.Die();
 
+            // Stop sound
+            AudioManager.instance.Stop("Run");
+
             // Change animation
             animationHandler.ChangeAnimation("Dead");
 
@@ -93,9 +94,6 @@ public class PlayerController : MonoBehaviour
 
                 // Handle interacting
                 HandleInteracting();
-
-                // Handle rolling
-                HandleRolling();
 
                 // Check for interacting
                 if (interactionHandler.CanExit())
@@ -195,7 +193,7 @@ public class PlayerController : MonoBehaviour
                     // Don't get hit
                     damageHandler.SetInvincible(true);
                     
-                    // Play particles
+                    // Stop particles
                     juiceHandler.ToggleRunning(false);
 
                     // Stop sound
@@ -215,7 +213,7 @@ public class PlayerController : MonoBehaviour
                 // Check for idling
                 if (!movementHandler.IsRunning())
                 {
-                    // Play particles
+                    // Stop particles
                     juiceHandler.ToggleRunning(false);
 
                     // Stop sound
@@ -231,7 +229,7 @@ public class PlayerController : MonoBehaviour
                 // Check for crouch walk
                 if (movementHandler.IsCrouching())
                 {
-                    // Play particles
+                    // Stop particles
                     juiceHandler.ToggleRunning(false);
 
                     // Stop sound
@@ -247,7 +245,7 @@ public class PlayerController : MonoBehaviour
                 // Check for jump
                 if (movementHandler.IsRising())
                 {
-                    // Play particles
+                    // Stop particles
                     juiceHandler.ToggleRunning(false);
 
                     // Stop sound
@@ -266,7 +264,7 @@ public class PlayerController : MonoBehaviour
                 // Check for falling
                 if (movementHandler.IsFalling())
                 {
-                    // Play particles
+                    // Stop particles
                     juiceHandler.ToggleRunning(false);
 
                     // Stop sound
@@ -282,6 +280,9 @@ public class PlayerController : MonoBehaviour
                 // Check for rolling
                 if (movementHandler.IsRolling())
                 {
+                    // Stop particles
+                    juiceHandler.ToggleRunning(false);
+
                     // Make invicible
                     damageHandler.SetInvincible(true);
 
@@ -300,6 +301,9 @@ public class PlayerController : MonoBehaviour
 
                 // Handle running
                 HandleRunning();
+
+                // Handle jumping
+                HandleJumping();
 
                 // Handle jump cancel
                 if (inputHandler.GetJumpInputUp()) movementHandler.EndJumpEarly();
@@ -324,6 +328,19 @@ public class PlayerController : MonoBehaviour
                     playerState = PlayerState.Fall;
                 }
 
+                // // Check for coyote jumps
+                // if (movementHandler.IsRising())
+                // {
+                //     // Play sound
+                //     AudioManager.instance.Play("Jump");
+
+                //     // Change animation
+                //     animationHandler.ChangeAnimation("Rise");
+
+                //     // Change states
+                //     playerState = PlayerState.Rise;
+                // }
+
                 break;
             case PlayerState.Fall:
 
@@ -332,9 +349,6 @@ public class PlayerController : MonoBehaviour
 
                 // Handle jumping
                 HandleJumping();
-
-                // TEMP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                HandleDropping();
 
                 // Check for landing
                 if (movementHandler.IsGrounded())
@@ -400,6 +414,9 @@ public class PlayerController : MonoBehaviour
                 // Handle crouching
                 HandleCrouching();
 
+                // Handle dropping
+                HandleDropping();
+
                 // Check for idling
                 if (!movementHandler.IsCrouching())
                 {
@@ -423,6 +440,19 @@ public class PlayerController : MonoBehaviour
                     playerState = PlayerState.Crouchwalk;
                 }
 
+                // Check for dropping
+                if (movementHandler.IsFalling())
+                {
+                    // Disable crouch
+                    movementHandler.EndCrouch();
+
+                    // Change animation
+                    animationHandler.ChangeAnimation("Fall");
+
+                    // Change states
+                    playerState = PlayerState.Fall;
+                }
+
                 break;
             case PlayerState.Crouchwalk:
 
@@ -431,6 +461,9 @@ public class PlayerController : MonoBehaviour
 
                 // Handle crouching
                 HandleCrouching();
+
+                // Handle dropping
+                HandleDropping();
 
                 // Check for crouch
                 if (!movementHandler.IsRunning())
@@ -462,7 +495,7 @@ public class PlayerController : MonoBehaviour
                 }
 
                 // Check for falling
-                if (!movementHandler.IsGrounded())
+                if (movementHandler.IsFalling())
                 {
                     // Disable crouch
                     movementHandler.EndCrouch();
@@ -665,7 +698,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDropping()
     {
-        if (inputHandler.GetCrouchKey() && inputHandler.GetJumpInputDown()) platformHandler.Drop();
+        if (inputHandler.GetCrouchKey() && inputHandler.GetJumpInputDown()) movementHandler.Drop();
     }
 
     private void HandleRolling()

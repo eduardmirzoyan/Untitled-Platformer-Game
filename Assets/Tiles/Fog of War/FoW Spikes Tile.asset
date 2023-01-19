@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FoW Spikes Tile
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 21300000, guid: a3c216c50bc876b4e983baae1074df51, type: 3}
-  m_Color: {r: 0.83921576, g: 0.76470596, b: 0.5176471, a: 1}
+  m_Color: {r: 0.83921576, g: 0.76470596, b: 0.5176471, a: 0.5882353}
   m_Transform:
     e00: 1
     e01: 0

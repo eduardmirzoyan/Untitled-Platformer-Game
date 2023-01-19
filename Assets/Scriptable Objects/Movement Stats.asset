@@ -27,7 +27,6 @@ MonoBehaviour:
   risingGravity: 40
   fallingGravity: 60
   maxFallSpeed: 40
-  rollDuration: 0.66
-  rollAcceleration: 60
+  rollDuration: 0.5
   maxRollSpeed: 6
   deathDeceleration: 4
