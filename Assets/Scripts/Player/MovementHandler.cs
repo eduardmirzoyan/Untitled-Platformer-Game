@@ -47,6 +47,7 @@ public class MovementHandler : MonoBehaviour
     [SerializeField] private MovementStats stats;
 
     private float rollTime;
+    private float rollSpeed;
 
     private void Awake()
     {
@@ -130,6 +131,21 @@ public class MovementHandler : MonoBehaviour
     {
         // Set time
         rollTime = stats.rollDuration;
+
+        // Set speed
+        if (moveRequest != 0)
+        {
+            rollSpeed = moveRequest * stats.maxRollSpeed;
+        }
+        else if (isFacingRight)
+        {
+            rollSpeed = stats.maxRollSpeed;
+        }
+        else
+        {
+            rollSpeed = -stats.maxRollSpeed;
+        }
+        
     }
 
     #endregion
@@ -253,7 +269,7 @@ public class MovementHandler : MonoBehaviour
         if (rollTime > 0f)
         {
             // Set speed constant
-            currentVelocity.x = moveRequest * stats.maxRollSpeed;
+            currentVelocity.x = rollSpeed;
 
             // Decrement roll time
             rollTime -= Time.deltaTime;

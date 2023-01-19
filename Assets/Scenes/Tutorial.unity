@@ -1159,7 +1159,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 189652605919616314, guid: 1bbec333992002f469d97eb3b6be1b0a, type: 3}
       propertyPath: text
-      value: Press <color=blue>ESCAPE</color> to pause the game.
+      value: Press <color=blue>P</color> to pause the game.
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bbec333992002f469d97eb3b6be1b0a, type: 3}
@@ -46675,7 +46675,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 681619883
   m_SortingLayer: 2
-  m_SortingOrder: -1
+  m_SortingOrder: -3
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16

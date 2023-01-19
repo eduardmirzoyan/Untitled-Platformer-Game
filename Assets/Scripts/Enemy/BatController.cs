@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class BatController : MonoBehaviour
 {
-    private enum BatState { Idle, Aggro };
+    private enum BatState { Idle, Aggro, Return };
 
     [Header("Components")]
     [SerializeField] private AnimationHandler animationHandler;
@@ -17,12 +17,15 @@ public class BatController : MonoBehaviour
     [Header("Data")]
     [SerializeField] private BatState batState;
     [SerializeField] private Transform targetTransform;
+    [SerializeField] private Vector3 homePosition;
 
     [Header("Settings")]
     [SerializeField] private LayerMask targetLayer;
     [SerializeField] private float aggroRange = 5f;
     [SerializeField] private float aggroRingRotateSpeed = 10f;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float deAggroRange = 10f;
+    [SerializeField] private float returnRange = 0.1f;
 
     private void Awake()
     {
@@ -63,7 +66,7 @@ public class BatController : MonoBehaviour
                     aggroRangeDisplay.enabled = false;
 
                     // Show indicator
-                    indicatorAnimator.Play("Show");
+                    indicatorAnimator.Play("Show Red");
 
                     // Play sound
                     AudioManager.instance.Play("Enemy Aggro");
@@ -81,6 +84,41 @@ public class BatController : MonoBehaviour
                 // Chase the target
                 ChaseTarget();
 
+                // Check to see if target is out of range
+                if (Vector2.Distance(homePosition, targetTransform.position) >= deAggroRange)
+                {
+                    // Drop aggro
+                    targetTransform = null;
+
+                    // Show indicator
+                    indicatorAnimator.Play("Show Blue");
+
+                    // Change state
+                    batState = BatState.Return;
+                }
+
+                break;
+            case BatState.Return:
+                
+                // Travel home
+                agent.SetDestination(homePosition);
+
+                // If reached home
+                if (Vector2.Distance(transform.position, homePosition) <= returnRange)
+                {
+                    // Show ring
+                    aggroRangeDisplay.enabled = true;
+
+                    // Hide indicator
+                    indicatorAnimator.Play("Idle");
+
+                    // Play animation
+                    animationHandler.ChangeAnimation("Idle");
+
+                    // Change state
+                    batState = BatState.Idle;
+                }
+
                 break;
             default:
                 throw new System.Exception("STATE NOT IMPLEMENTED.");
@@ -90,7 +128,7 @@ public class BatController : MonoBehaviour
     private void FindPerchingSpot()
     {
         var hit = Physics2D.Raycast(transform.position, Vector2.up, float.PositiveInfinity, groundLayer);
-        
+
         // If a ceiling was hit
         if (hit)
         {
@@ -99,6 +137,9 @@ public class BatController : MonoBehaviour
 
             // Relocate
             transform.position = newPosition;
+
+            // Set home here
+            homePosition = newPosition;
         }
     }
 
@@ -121,7 +162,7 @@ public class BatController : MonoBehaviour
                 // Set target
                 targetTransform = hit.transform;
             }
-            
+
         }
 
         // Rotate ring
@@ -154,5 +195,11 @@ public class BatController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, aggroRange);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(homePosition, deAggroRange);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(homePosition, returnRange);
     }
 }

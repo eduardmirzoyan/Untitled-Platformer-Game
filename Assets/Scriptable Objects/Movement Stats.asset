@@ -22,11 +22,11 @@ MonoBehaviour:
   jumpBuffer: 0.15
   maxCrouchWalkSpeed: 1.5
   maxWallSlideSpeed: 2
-  wallSlideAcceleration: 30
+  wallSlideAcceleration: 45
   wallJumpPower: {x: 10, y: 10}
   risingGravity: 40
   fallingGravity: 60
   maxFallSpeed: 40
-  rollDuration: 0.5
-  maxRollSpeed: 6
+  rollDuration: 0.25
+  maxRollSpeed: 7
   deathDeceleration: 4

@@ -95,6 +95,9 @@ public class PlayerController : MonoBehaviour
                 // Handle interacting
                 HandleInteracting();
 
+                // Handle rolling
+                HandleRolling();
+
                 // Check for interacting
                 if (interactionHandler.CanExit())
                 {
@@ -164,6 +167,22 @@ public class PlayerController : MonoBehaviour
 
                     // Change states
                     playerState = PlayerState.Fall;
+                }
+
+                // Check for rolling
+                if (movementHandler.IsRolling())
+                {
+                    // Make invicible
+                    damageHandler.SetInvincible(true);
+
+                    // Play sound
+                    AudioManager.instance.Play("Roll");
+
+                    // Change animation
+                    animationHandler.ChangeAnimation("Roll");
+
+                    // Change states
+                    playerState = PlayerState.Roll;
                 }
 
                 break;
@@ -282,6 +301,9 @@ public class PlayerController : MonoBehaviour
                 {
                     // Stop particles
                     juiceHandler.ToggleRunning(false);
+
+                    // Stop sound
+                    AudioManager.instance.Stop("Run");
 
                     // Make invicible
                     damageHandler.SetInvincible(true);

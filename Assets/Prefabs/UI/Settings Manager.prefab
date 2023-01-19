@@ -4792,7 +4792,7 @@ MonoBehaviour:
   musicVolumeSlider: {fileID: 5072189346331372591}
   sfxVolumeSlider: {fileID: 5072189347149430775}
   uiVolumeSlider: {fileID: 5072189346048949019}
-  closeHotkey: 27
+  closeHotkey: 112
   debugMode: 1
 --- !u!1 &5072189347278741383
 GameObject:

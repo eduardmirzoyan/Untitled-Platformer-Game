@@ -1964,5 +1964,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 2188717127644858066}
-  pauseKey: 27
+  pauseKey: 112
   isPaused: 0
