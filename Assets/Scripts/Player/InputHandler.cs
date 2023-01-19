@@ -21,4 +21,5 @@ public class InputHandler : MonoBehaviour
     
     public bool GetInteractKeyDown() => Input.GetKeyDown(controls.interactKey);
     
+    public bool GetRollKeyDown() => Input.GetKeyDown(controls.rollKey);
 }

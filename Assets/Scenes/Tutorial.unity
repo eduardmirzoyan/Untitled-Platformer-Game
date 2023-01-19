@@ -43663,26 +43663,6 @@ Tilemap:
   m_GameObject: {fileID: 531721392}
   m_Enabled: 1
   m_Tiles:
-  - first: {x: 10, y: 38, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 2
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741826
-  - first: {x: 11, y: 38, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741826
   - first: {x: 1, y: 39, z: 0}
     second:
       serializedVersion: 2
@@ -43745,17 +43725,17 @@ Tilemap:
       m_AllTileFlags: 1073741826
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 8
+  - m_RefCount: 6
     m_Data: {fileID: 11400000, guid: 67a07aa2ce5c3af40a29683434e0b3ab, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 3
+  - m_RefCount: 2
     m_Data: {fileID: 1112279812, guid: 563e83a86a2d79c4c97f47df0d64343e, type: 3}
   - m_RefCount: 2
     m_Data: {fileID: 1167538697, guid: 563e83a86a2d79c4c97f47df0d64343e, type: 3}
-  - m_RefCount: 3
+  - m_RefCount: 2
     m_Data: {fileID: -1353414920, guid: 563e83a86a2d79c4c97f47df0d64343e, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 8
+  - m_RefCount: 6
     m_Data:
       e00: 1
       e01: 0
@@ -43774,7 +43754,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 8
+  - m_RefCount: 6
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -43844,22 +43824,6 @@ CompositeCollider2D:
         Y: 398124992
       - X: 40000000
         Y: 398124992
-    - - X: 120000100
-        Y: 388124951
-      - X: 120000100
-        Y: 390000041
-      - X: 120000041
-        Y: 390000100
-      - X: 99999959
-        Y: 390000100
-      - X: 99999900
-        Y: 390000041
-      - X: 99999900
-        Y: 388124951
-      - X: 99999959
-        Y: 388124892
-      - X: 120000041
-        Y: 388124892
   m_CompositePaths:
     m_Paths:
     - - {x: 3.9999747, y: 40.81249}
@@ -43870,10 +43834,6 @@ CompositeCollider2D:
       - {x: 3.999971, y: 40}
       - {x: 1, y: 39.999973}
       - {x: 1.0000293, y: 39.8125}
-    - - {x: 11.999974, y: 38.81249}
-      - {x: 11.999974, y: 39.00001}
-      - {x: 9.99999, y: 38.999973}
-      - {x: 10.000026, y: 38.81249}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
 --- !u!50 &531721397
@@ -47189,10 +47149,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wallTilemap: {fileID: 504294486}
+  platformTilemap: {fileID: 531721395}
+  spikesTilemap: {fileID: 821588200}
   fogOfWarTileMap: {fileID: 409894960}
   fogTile: {fileID: 11400000, guid: 485e4ddefda51fc429e327cc9f95ab80, type: 2}
   revealedWallTile: {fileID: 11400000, guid: f6ccd62503265f044be8415bb2aa9bde, type: 2}
   revealedEmptyTile: {fileID: 0}
+  revealedPlatformTile: {fileID: 11400000, guid: 46f7c9576b913bb4da4e6455502049a0, type: 2}
+  revealedSpikesTile: {fileID: 11400000, guid: 2806ab1438ffbac47b1b64ea7524fb66, type: 2}
   discoverer: {fileID: 0}
   discoveryRadius: 5
 --- !u!156049354 &1236512766

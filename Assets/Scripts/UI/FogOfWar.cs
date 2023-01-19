@@ -7,10 +7,14 @@ public class FogOfWar : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private Tilemap wallTilemap;
+    [SerializeField] private Tilemap platformTilemap;
+    [SerializeField] private Tilemap spikesTilemap;
     [SerializeField] private Tilemap fogOfWarTileMap;
     [SerializeField] private Tile fogTile;
     [SerializeField] private Tile revealedWallTile;
     [SerializeField] private Tile revealedEmptyTile;
+    [SerializeField] private Tile revealedPlatformTile;
+    [SerializeField] private Tile revealedSpikesTile;
 
     [Header("Data")]
     [SerializeField] private Transform discoverer;
@@ -82,6 +86,16 @@ public class FogOfWar : MonoBehaviour
         {
             // Set to revealed wall
             fogOfWarTileMap.SetTile(position, revealedWallTile);
+        }
+        else if (platformTilemap.HasTile(position))
+        {
+            // Set to revealed platform
+            fogOfWarTileMap.SetTile(position, revealedPlatformTile);
+        }
+        else if (spikesTilemap.HasTile(position))
+        {
+            // Set to revealed spikes
+            fogOfWarTileMap.SetTile(position, revealedSpikesTile);
         }
         else
         {

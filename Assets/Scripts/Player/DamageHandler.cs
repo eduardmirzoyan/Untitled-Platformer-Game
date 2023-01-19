@@ -51,9 +51,9 @@ public class DamageHandler : MonoBehaviour
         }
     }
 
-    public void SetInvincible()
+    public void SetInvincible(bool state)
     {
-        isInvincible = true;
+        isInvincible = state;
     }
 
     private void HitEffect()

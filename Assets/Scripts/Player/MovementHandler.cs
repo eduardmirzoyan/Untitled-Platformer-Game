@@ -44,6 +44,8 @@ public class MovementHandler : MonoBehaviour
     [Header("Stats")]
     [SerializeField] private MovementStats stats;
 
+    private float rollTime;
+
     private void Awake()
     {
         // Get refs
@@ -116,6 +118,11 @@ public class MovementHandler : MonoBehaviour
         
     }
 
+    public void Roll()
+    {
+        rollTime = stats.rollDuration;
+    }
+
     #endregion
 
     private void Update()
@@ -143,6 +150,7 @@ public class MovementHandler : MonoBehaviour
     public bool IsFalling() => !groundedThisFrame && body.velocity.y < -0.1f;
     public bool IsMantling() => isMantling;
     public bool IsCrouching() => crouchRequest;
+    public bool IsRolling() => rollTime > 0f;
 
     public void PerformMantle()
     {
@@ -227,6 +235,19 @@ public class MovementHandler : MonoBehaviour
         {
             // Decelerate to 0, slowly
             currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, 0f, stats.deathDeceleration * Time.deltaTime);
+
+            // Finish
+            return;
+        }
+
+        // Check for rolling
+        if (rollTime > 0f)
+        {
+            // Accelerate to max
+            currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, stats.maxRollSpeed, stats.rollAcceleration * Time.deltaTime);
+
+            // Decrement roll ime
+            rollTime -= Time.deltaTime;
 
             // Finish
             return;
