@@ -120,7 +120,10 @@ public class TimerDisplay : MonoBehaviour
         if (time < savedTime)
         {
             // Debug
-            print("New record saved!");
+            print("New record saved for Best Time " + TransitionManager.instance.GetSceneIndex());
+
+            // Play sound
+            AudioManager.instance.Play("Highscore");
 
             // Overwrite save for this level
             PlayerPrefs.SetFloat("Best Time " + TransitionManager.instance.GetSceneIndex(), time);

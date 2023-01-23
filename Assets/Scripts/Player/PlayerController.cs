@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private enum PlayerState { Idle, Run, Rise, Fall, Crouch, Crouchwalk, Wallslide, Wallhang, Mantle, Exiting, Entering, Dead, Invisible, Roll };
+    private enum PlayerState { Idle, Run, Rise, Fall, Crouch, Crouchwalk, Wallslide, Wallhang, Mantle, Exit, Enter, Dead, Invisible, Roll };
 
     [Header("Components")]
     [SerializeField] private InputHandler inputHandler;
@@ -48,8 +48,8 @@ public class PlayerController : MonoBehaviour
         if (this.transform == playerTransform)
         {
             // Change states
-            playerState = PlayerState.Entering;
-            animationHandler.ChangeAnimation("Enter");
+            playerState = PlayerState.Enter;
+            animationHandler.ChangeAnimation(playerState.ToString());
         }
         
     }
@@ -110,11 +110,11 @@ public class PlayerController : MonoBehaviour
                     // Trigger event
                     LevelManager.instance.ExitLevel();
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Exit");
-
                     // Change states
-                    playerState = PlayerState.Exiting;
+                    playerState = PlayerState.Exit;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for running
@@ -126,24 +126,24 @@ public class PlayerController : MonoBehaviour
                     // Play sound
                     AudioManager.instance.Play("Run");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Run");
-
                     // Change states
                     playerState = PlayerState.Run;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for crouching
                 if (movementHandler.IsCrouching())
                 {
                     // Enable crouch
-                    movementHandler.StartCrouch();
-
-                    // Change animation
-                    animationHandler.ChangeAnimation("Crouch");
+                    movementHandler.StartCrouch();;
 
                     // Change states
                     playerState = PlayerState.Crouch;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for jumping
@@ -152,21 +152,21 @@ public class PlayerController : MonoBehaviour
                     // Play sound
                     AudioManager.instance.Play("Jump");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Rise");
-
                     // Change states
                     playerState = PlayerState.Rise;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for falling
                 if (movementHandler.IsFalling())
                 {
-                    // Change animation
-                    animationHandler.ChangeAnimation("Fall");
-
                     // Change states
                     playerState = PlayerState.Fall;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for rolling
@@ -178,11 +178,11 @@ public class PlayerController : MonoBehaviour
                     // Play sound
                     AudioManager.instance.Play("Roll");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Roll");
-
                     // Change states
                     playerState = PlayerState.Roll;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 break;
@@ -218,15 +218,14 @@ public class PlayerController : MonoBehaviour
                     // Stop sound
                     AudioManager.instance.Stop("Run");
 
+                    // Change states
+                    playerState = PlayerState.Exit;
+
                     // Change animation
-                    animationHandler.ChangeAnimation("Exit");
+                    animationHandler.ChangeAnimation(playerState.ToString());
 
                     // Trigger event
                     LevelManager.instance.ExitLevel();
-
-
-                    // Change states
-                    playerState = PlayerState.Exiting;
                 }
 
                 // Check for idling
@@ -238,11 +237,11 @@ public class PlayerController : MonoBehaviour
                     // Stop sound
                     AudioManager.instance.Stop("Run");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Idle");
-
                     // Change states
                     playerState = PlayerState.Idle;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for crouch walk
@@ -254,11 +253,11 @@ public class PlayerController : MonoBehaviour
                     // Stop sound
                     AudioManager.instance.Stop("Run");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Crouch Walk");
-
                     // Change states
                     playerState = PlayerState.Crouchwalk;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for jump
@@ -273,11 +272,11 @@ public class PlayerController : MonoBehaviour
                     // Play sound
                     AudioManager.instance.Play("Jump");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Rise");
-
                     // Change states
                     playerState = PlayerState.Rise;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for falling
@@ -289,11 +288,11 @@ public class PlayerController : MonoBehaviour
                     // Stop sound
                     AudioManager.instance.Stop("Run");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Fall");
-
                     // Change states
                     playerState = PlayerState.Fall;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for rolling
@@ -311,11 +310,11 @@ public class PlayerController : MonoBehaviour
                     // Play sound
                     AudioManager.instance.Play("Roll");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Roll");
-
                     // Change states
                     playerState = PlayerState.Roll;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 break;
@@ -333,35 +332,22 @@ public class PlayerController : MonoBehaviour
                 // Check for landing
                 if (movementHandler.IsGrounded())
                 {
-                    // Change animation
-                    animationHandler.ChangeAnimation("Idle");
-
                     // Change states
                     playerState = PlayerState.Idle;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for falling
                 if (movementHandler.IsFalling())
                 {
-                    // Change animation
-                    animationHandler.ChangeAnimation("Fall");
-
                     // Change states
                     playerState = PlayerState.Fall;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
-
-                // // Check for coyote jumps
-                // if (movementHandler.IsRising())
-                // {
-                //     // Play sound
-                //     AudioManager.instance.Play("Jump");
-
-                //     // Change animation
-                //     animationHandler.ChangeAnimation("Rise");
-
-                //     // Change states
-                //     playerState = PlayerState.Rise;
-                // }
 
                 break;
             case PlayerState.Fall:
@@ -381,11 +367,11 @@ public class PlayerController : MonoBehaviour
                     // Play sound
                     AudioManager.instance.Play("Land");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Idle");
-
                     // Change states
                     playerState = PlayerState.Idle;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for coyote jumps
@@ -394,11 +380,11 @@ public class PlayerController : MonoBehaviour
                     // Play sound
                     AudioManager.instance.Play("Jump");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Rise");
-
                     // Change states
                     playerState = PlayerState.Rise;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for ledge
@@ -407,11 +393,11 @@ public class PlayerController : MonoBehaviour
                     // Play sound
                     AudioManager.instance.Play("Grab Ledge");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Hang");
-
                     // Change states
                     playerState = PlayerState.Wallhang;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Handle wall sliding
@@ -420,11 +406,11 @@ public class PlayerController : MonoBehaviour
                     // Play particles
                     juiceHandler.ToggleSlide(true);
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Wallslide");
-
                     // Change states
                     playerState = PlayerState.Wallslide;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 break;
@@ -445,21 +431,21 @@ public class PlayerController : MonoBehaviour
                     // Disable crouch
                     movementHandler.EndCrouch();
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Idle");
-
                     // Change states
                     playerState = PlayerState.Idle;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for crouch walk
                 if (movementHandler.IsRunning())
                 {
-                    // Change animation
-                    animationHandler.ChangeAnimation("Crouch Walk");
-
                     // Change states
                     playerState = PlayerState.Crouchwalk;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for dropping
@@ -468,11 +454,11 @@ public class PlayerController : MonoBehaviour
                     // Disable crouch
                     movementHandler.EndCrouch();
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Fall");
-
                     // Change states
                     playerState = PlayerState.Fall;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 break;
@@ -490,11 +476,11 @@ public class PlayerController : MonoBehaviour
                 // Check for crouch
                 if (!movementHandler.IsRunning())
                 {
-                    // Change animation
-                    animationHandler.ChangeAnimation("Crouch");
-
                     // Change states
                     playerState = PlayerState.Crouch;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for running
@@ -509,11 +495,11 @@ public class PlayerController : MonoBehaviour
                     // Play sound
                     AudioManager.instance.Play("Run");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Run");
-
                     // Change states
                     playerState = PlayerState.Run;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for falling
@@ -522,11 +508,11 @@ public class PlayerController : MonoBehaviour
                     // Disable crouch
                     movementHandler.EndCrouch();
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Fall");
-
                     // Change states
                     playerState = PlayerState.Fall;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 break;
@@ -547,11 +533,11 @@ public class PlayerController : MonoBehaviour
                     // Play sound
                     AudioManager.instance.Play("Jump");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Rise");
-
                     // Change states
                     playerState = PlayerState.Rise;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for fall
@@ -560,11 +546,11 @@ public class PlayerController : MonoBehaviour
                     // Stop particles
                     juiceHandler.ToggleSlide(false);
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Fall");
-
                     // Change states
                     playerState = PlayerState.Fall;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for idle
@@ -573,11 +559,11 @@ public class PlayerController : MonoBehaviour
                     // Stop particles
                     juiceHandler.ToggleSlide(false);
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Idle");
-
                     // Change states
                     playerState = PlayerState.Idle;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 break;
@@ -595,21 +581,21 @@ public class PlayerController : MonoBehaviour
                     // Play sound
                     AudioManager.instance.Play("Jump");
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Rise");
-
                     // Change states
                     playerState = PlayerState.Rise;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 // Check for mantle
                 if (movementHandler.IsMantling())
                 {
-                    // Change animation
-                    animationHandler.ChangeAnimation("Mantle");
-
                     // Change states
                     playerState = PlayerState.Mantle;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 break;
@@ -624,11 +610,11 @@ public class PlayerController : MonoBehaviour
                     // Move model
                     movementHandler.PerformMantle();
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Idle");
-
                     // Change states
                     playerState = PlayerState.Idle;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 break;
@@ -642,28 +628,28 @@ public class PlayerController : MonoBehaviour
                     // Disable invicible
                     damageHandler.SetInvincible(false);
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Idle");
-
                     // Change states
                     playerState = PlayerState.Idle;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 break;
-            case PlayerState.Exiting:
+            case PlayerState.Exit:
 
                 // When animation is over
                 if (animationHandler.IsFinished())
                 {
-                    // Change animation
-                    animationHandler.ChangeAnimation("Invisible");
-
                     // Change states
                     playerState = PlayerState.Invisible;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 break;
-            case PlayerState.Entering:
+            case PlayerState.Enter:
 
                 // When animation is over...
                 if (animationHandler.IsFinished())
@@ -671,11 +657,11 @@ public class PlayerController : MonoBehaviour
                     // Trigger event
                     LevelEvents.instance.TriggerOnLockEntrance();
 
-                    // Change animation
-                    animationHandler.ChangeAnimation("Idle");
-
                     // Change states
                     playerState = PlayerState.Idle;
+
+                    // Change animation
+                    animationHandler.ChangeAnimation(playerState.ToString());
                 }
 
                 break;

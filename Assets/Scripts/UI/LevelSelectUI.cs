@@ -6,29 +6,21 @@ using TMPro;
 public class LevelSelectUI : MonoBehaviour
 {
     [Header("Components")]
-    [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private TextMeshProUGUI[] scoreTexts;
+    [SerializeField, ReadOnly] private Animator animator;
+    [SerializeField, ReadOnly] private TextMeshProUGUI[] scoreTexts;
+
+    [Header("Settings")]
+    [SerializeField] private float delayDuration = 1f;
 
     private void Awake()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
+        animator = GetComponent<Animator>();
     }
 
-    public void Show()
+    private void Start()
     {
-        canvasGroup.alpha = 1f;
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
-
         // Show updated scores
         UpdateScores();
-    }
-
-    public void Hide()
-    {
-        canvasGroup.alpha = 0f;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
     }
 
     public void StartLevel(int buildIndex)
@@ -36,11 +28,20 @@ public class LevelSelectUI : MonoBehaviour
         // Debug
         print("Starting Level " + buildIndex);
 
+        // Start level
+        StartCoroutine(DelayedStart(delayDuration, buildIndex));
+    }
+
+    private IEnumerator DelayedStart(float duration, int buildIndex)
+    {
+        // Wait
+        yield return new WaitForSeconds(duration);
+
         // Load scene
         TransitionManager.instance.LoadSelectedScene(buildIndex, Vector3.zero);
     }
 
-    private void UpdateScores()
+    public void UpdateScores()
     {
         // Loop through each
         for (int i = 0; i < scoreTexts.Length; i++)

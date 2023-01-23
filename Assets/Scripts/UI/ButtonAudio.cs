@@ -12,13 +12,19 @@ public class ButtonAudio : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     private void Awake()
     {
         button = GetComponent<Button>();
+        button.onClick.AddListener(PlayClickAudio);
+    }
+
+    private void PlayClickAudio()
+    {
+        AudioManager.instance.Play("Button Hover");
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         // Play audio
         if (button.interactable)
-            AudioManager.instance.Play("Button Hover");
+            PlayClickAudio();
     }
 
     public void OnPointerDown(PointerEventData eventData)

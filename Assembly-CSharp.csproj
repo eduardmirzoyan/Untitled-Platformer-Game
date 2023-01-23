@@ -36,22 +36,23 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\UI\Parallax.cs" />
-     <Compile Include="Assets\Scripts\UI\MinimapUI.cs" />
-     <Compile Include="Assets\Scripts\UI\MinimapCamera.cs" />
-     <Compile Include="Assets\Scripts\UI\TimerDisplay.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Game\Parallax.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Game\MinimapUI.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Game\MinimapCamera.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Game\TimerDisplay.cs" />
      <Compile Include="Assets\Scripts\Audio\Sound.cs" />
      <Compile Include="Assets\Scripts\Player\SpikesHandler.cs" />
      <Compile Include="Assets\Scripts\Player\InteractionHandler.cs" />
      <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
      <Compile Include="Assets\Scripts\UI\TransitionManager.cs" />
+     <Compile Include="Assets\Scripts\UI\ScrollingManagerUI.cs" />
      <Compile Include="Assets\Scripts\Player\MovementStats.cs" />
      <Compile Include="Assets\Scripts\LevelManager.cs" />
      <Compile Include="Assets\Scripts\Player\JuiceHandler.cs" />
      <Compile Include="Assets\Scripts\UI\LevelSelectUI.cs" />
      <Compile Include="Assets\Scripts\UI\ButtonAudio.cs" />
      <Compile Include="Assets\Scripts\Audio\RunAudio.cs" />
-     <Compile Include="Assets\Scripts\UI\PointerManager.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Game\PointerManager.cs" />
      <Compile Include="Assets\Scripts\Player\MovementHandler.cs" />
      <Compile Include="Assets\Scripts\UI\CutoutMaskUI.cs" />
      <Compile Include="Assets\Scripts\Player\PlatformHandler.cs" />
@@ -59,14 +60,15 @@
      <Compile Include="Assets\Scripts\UI\FadeUI.cs" />
      <Compile Include="Assets\Scripts\Controls.cs" />
      <Compile Include="Assets\Scripts\UI\SettingsManager.cs" />
-     <Compile Include="Assets\Scripts\UI\CollectiblesDisplay.cs" />
-     <Compile Include="Assets\Scripts\UI\LevelFailUI.cs" />
+     <Compile Include="Assets\Scripts\UI\ScrollingUI.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Game\CollectiblesDisplay.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Game\LevelFailUI.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
      <Compile Include="Assets\Scripts\UI\MainMenuManager.cs" />
      <Compile Include="Assets\Scripts\CollectibleHandler.cs" />
-     <Compile Include="Assets\Scripts\UI\FogOfWar.cs" />
-     <Compile Include="Assets\Scripts\UI\ArrowPointer.cs" />
-     <Compile Include="Assets\Scripts\UI\LevelWinUI.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Game\FogOfWar.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Game\ArrowPointer.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Game\LevelWinUI.cs" />
      <Compile Include="Assets\Scripts\LevelEvents.cs" />
      <Compile Include="Assets\Scripts\EntranceDoorHandler.cs" />
      <Compile Include="Assets\Scripts\UI\PauseManager.cs" />
@@ -75,6 +77,7 @@
      <Compile Include="Assets\Scripts\Player\AnimationHandler.cs" />
      <Compile Include="Assets\Scripts\Enemy\BatController.cs" />
      <Compile Include="Assets\Scripts\Player\InputHandler.cs" />
+     <Compile Include="Assets\Scripts\UI\ReadOnlyAttribute.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

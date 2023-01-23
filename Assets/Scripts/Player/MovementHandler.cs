@@ -11,29 +11,29 @@ public class MovementHandler : MonoBehaviour
     [SerializeField] private PlatformHandler platformHandler;
 
     [Header("Time Data")]
-    [SerializeField] private float timeSinceGrounded;
-    [SerializeField] private float timeSinceWall;
-    [SerializeField] private float jumpInputTime;
+    [SerializeField, ReadOnly] private float timeSinceGrounded;
+    [SerializeField, ReadOnly] private float timeSinceWall;
+    [SerializeField, ReadOnly] private float jumpInputTime;
 
     [Header("Frame Data")]
-    [SerializeField] private bool groundedThisFrame;
-    [SerializeField] private bool groundedLastFrame;
-    [SerializeField] private int onWallThisFrame;
-    [SerializeField] private int onWallLastFrame;
-    [SerializeField] private bool onLedgeThisFrame;
-    [SerializeField] private bool onLedgeLastFrame;
+    [SerializeField, ReadOnly] private bool groundedThisFrame;
+    [SerializeField, ReadOnly] private bool groundedLastFrame;
+    [SerializeField, ReadOnly] private int onWallThisFrame;
+    [SerializeField, ReadOnly] private int onWallLastFrame;
+    [SerializeField, ReadOnly] private bool onLedgeThisFrame;
+    [SerializeField, ReadOnly] private bool onLedgeLastFrame;
 
     [Header("States")]
-    [SerializeField] private bool isFacingRight;
-    [SerializeField] private int moveRequest;
-    [SerializeField] private bool isJumping;
-    [SerializeField] private bool isWallJumping;
-    [SerializeField] private bool endJumpRequest;
-    [SerializeField] private bool crouchRequest;
-    [SerializeField] private bool isWallSliding;
-    [SerializeField] private bool isWallHanging;
-    [SerializeField] private bool isMantling;
-    [SerializeField] private bool isDead;
+    [SerializeField, ReadOnly] private bool isFacingRight;
+    [SerializeField, ReadOnly] private int moveRequest;
+    [SerializeField, ReadOnly] private bool isJumping;
+    [SerializeField, ReadOnly] private bool isWallJumping;
+    [SerializeField, ReadOnly] private bool endJumpRequest;
+    [SerializeField, ReadOnly] private bool crouchRequest;
+    [SerializeField, ReadOnly] private bool isWallSliding;
+    [SerializeField, ReadOnly] private bool isWallHanging;
+    [SerializeField, ReadOnly] private bool isMantling;
+    [SerializeField, ReadOnly] private bool isDead;
 
     [Header("Settings")]
     [SerializeField] private LayerMask wallLayer;
@@ -41,7 +41,7 @@ public class MovementHandler : MonoBehaviour
     [SerializeField] private float checkThickness = 0.02f;
 
     [Header("Debugging")]
-    [SerializeField] private Vector2 currentVelocity;
+    [SerializeField, ReadOnly] private Vector2 currentVelocity;
 
     [Header("Stats")]
     [SerializeField] private MovementStats stats;

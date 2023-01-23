@@ -31,7 +31,7 @@ public class ArrowPointer : MonoBehaviour
         pointerImage.color = color;
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
         // If any target is lost
         if (fromTarget == null || toTarget == null)

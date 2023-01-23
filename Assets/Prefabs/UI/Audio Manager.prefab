@@ -144,7 +144,15 @@ MonoBehaviour:
     audioMixerGroup: {fileID: 7721883355296152601, guid: f843c9d0b8f97c8469bb0e1cbb650e08, type: 2}
   - name: Roll
     audioClip: {fileID: 8300000, guid: 5902cb1da4ff0f842b66442da3c3291c, type: 3}
-    volume: 0.1
+    volume: 0.2
+    pitch: 1
+    loop: 0
+    ignorePause: 0
+    audioSource: {fileID: 0}
+    audioMixerGroup: {fileID: 7721883355296152601, guid: f843c9d0b8f97c8469bb0e1cbb650e08, type: 2}
+  - name: Highscore
+    audioClip: {fileID: 8300000, guid: c1c0071c13befd34594fb0c6785e62da, type: 3}
+    volume: 0.2
     pitch: 1
     loop: 0
     ignorePause: 0
